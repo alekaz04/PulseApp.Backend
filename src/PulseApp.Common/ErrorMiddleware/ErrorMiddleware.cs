@@ -11,6 +11,7 @@ namespace PulseApp.Common;
 /// </summary>
 public class ErrorMiddleware
 {
+    /// <inheritdoc cref="RequestDelegate"/>
     private readonly RequestDelegate _next;
 
     /// <inheritdoc cref="ILogger{T}"/>

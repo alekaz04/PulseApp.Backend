@@ -16,15 +16,18 @@ public class PushController : ControllerBase
 {
     private readonly IVapidService _vapidService;
     private readonly ISubscriptionService _subscriptionService;
+    private readonly IPushNotificationService _pushNotificationService;
     private readonly ILogger<PushController> _logger;
 
     public PushController(
         IVapidService vapidService,
         ISubscriptionService subscriptionService,
+        IPushNotificationService pushNotificationService,
         ILogger<PushController> logger)
     {
         _vapidService = vapidService;
         _subscriptionService = subscriptionService;
+        _pushNotificationService = pushNotificationService;
         _logger = logger;
     }
 
@@ -65,7 +68,7 @@ public class PushController : ControllerBase
                 return BadRequest("Invalid subscription data");
             }
 
-            Guid subscriptionId = await _subscriptionService.CreateSubscriptionAsync(
+            Guid subscriptionId = await _subscriptionService.CreateOrUpdateSubscriptionAsync(
                 request.Endpoint,
                 request.Keys.P256dh,
                 request.Keys.Auth,
@@ -111,6 +114,66 @@ public class PushController : ControllerBase
         {
             _logger.LogError(ex, "Failed to delete push subscription");
             return StatusCode(500, "Failed to delete subscription");
+        }
+    }
+
+    /// <summary>
+    /// Отправить push-уведомление всем подписчикам (без авторизации для тестирования)
+    /// </summary>
+    [HttpPost("send-to-all")]
+    [ProducesResponseType(typeof(SendNotificationResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<SendNotificationResponse>> SendToAll([FromBody] SendNotificationRequest request)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(request.Title))
+            {
+                return BadRequest("Title is required");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Body))
+            {
+                return BadRequest("Body is required");
+            }
+
+            // Получаем активные подписки для статистики
+            var subscriptions = await _subscriptionService.GetActiveSubscriptionsAsync();
+            int totalSubscriptions = subscriptions.Count;
+
+            if (totalSubscriptions == 0)
+            {
+                _logger.LogWarning("No active subscriptions found");
+                return Ok(new SendNotificationResponse(0, "No active subscriptions"));
+            }
+
+            // Формируем payload
+            var payload = new PushNotificationPayload(
+                Title: request.Title,
+                Body: request.Body,
+                Icon: request.Icon ?? "/icons/icon-192x192.png",
+                Badge: request.Badge ?? "/icons/badge-72x72.png"
+            );
+
+            // Отправляем всем подписчикам (параллельно)
+            await _pushNotificationService.SendNotificationToAllAsync(payload);
+
+            _logger.LogInformation(
+                "Push notification sent to {Count} subscriptions: {Title}",
+                totalSubscriptions,
+                request.Title
+            );
+
+            return Ok(new SendNotificationResponse(
+                totalSubscriptions,
+                $"Notification sent to {totalSubscriptions} subscriber(s)"
+            ));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send push notification to all subscribers");
+            return StatusCode(500, "Failed to send notifications");
         }
     }
 }

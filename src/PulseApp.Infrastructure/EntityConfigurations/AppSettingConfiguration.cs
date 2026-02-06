@@ -14,26 +14,22 @@ public class AppSettingConfiguration : IEntityTypeConfiguration<AppSetting>
 {
     public void Configure(EntityTypeBuilder<AppSetting> builder)
     {
-        builder.ToTable("app_settings");
+        builder.ToTable(nameof(AppSetting));
 
         builder.HasKey(x => x.Key);
 
         builder.Property(x => x.Key)
-            .HasColumnName("key")
             .IsRequired()
             .HasMaxLength(100);
 
         builder.Property(x => x.Value)
-            .HasColumnName("value")
             .IsRequired()
             .HasMaxLength(2000);
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnName("created_at")
             .IsRequired();
 
         builder.Property(x => x.UpdatedAt)
-            .HasColumnName("updated_at")
             .IsRequired();
     }
 }

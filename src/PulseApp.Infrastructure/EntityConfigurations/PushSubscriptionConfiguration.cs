@@ -14,16 +14,12 @@ public class PushSubscriptionConfiguration : IEntityTypeConfiguration<PushSubscr
 {
     public void Configure(EntityTypeBuilder<PushSubscription> builder)
     {
-        builder.ToTable("push_subscriptions");
-
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
-            .HasColumnName("id")
             .IsRequired();
 
         builder.Property(x => x.Endpoint)
-            .HasColumnName("endpoint")
             .IsRequired()
             .HasMaxLength(512);
 
@@ -31,25 +27,20 @@ public class PushSubscriptionConfiguration : IEntityTypeConfiguration<PushSubscr
             .IsUnique();
 
         builder.Property(x => x.P256dh)
-            .HasColumnName("p256dh")
             .IsRequired()
             .HasMaxLength(256);
 
         builder.Property(x => x.Auth)
-            .HasColumnName("auth")
             .IsRequired()
             .HasMaxLength(256);
 
         builder.Property(x => x.CreatedAt)
-            .HasColumnName("created_at")
             .IsRequired();
 
         builder.Property(x => x.UserAgent)
-            .HasColumnName("user_agent")
             .HasMaxLength(512);
 
         builder.Property(x => x.IsActive)
-            .HasColumnName("is_active")
             .IsRequired()
             .HasDefaultValue(true);
     }

@@ -25,10 +25,10 @@ public class VapidService : IVapidService
 
     public async Task<VapidKeys> GetOrGenerateVapidKeysAsync()
     {
-        AppSetting? publicKeySetting = await _context.AppSettings
+        var publicKeySetting = await _context.AppSettings
             .FirstOrDefaultAsync(x => x.Key == PUBLIC_KEY);
 
-        AppSetting? privateKeySetting = await _context.AppSettings
+        var privateKeySetting = await _context.AppSettings
             .FirstOrDefaultAsync(x => x.Key == PRIVATE_KEY);
 
         if (publicKeySetting == null || privateKeySetting == null)

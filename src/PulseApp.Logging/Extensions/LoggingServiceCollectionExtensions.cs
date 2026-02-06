@@ -37,8 +37,6 @@ public static class LoggingServiceCollectionExtensions
                 "Logs",
                 columnWriters,
                 schemaName: "public",
-                useCopy: false,
-                period: TimeSpan.FromSeconds(5),
                 needAutoCreateTable: true,
                 failureCallback: ex => Console.WriteLine($"Sink error: {ex.Message}"))
             .WriteTo.Console()

@@ -45,3 +45,21 @@ public record PushNotificationPayload(
     string? Badge = "/icons/badge-72x72.png",
     Dictionary<string, object>? Data = null
 );
+
+/// <summary>
+/// Запрос на отправку уведомления всем подписчикам
+/// </summary>
+public record SendNotificationRequest(
+    string Title,
+    string Body,
+    string? Icon = null,
+    string? Badge = null
+);
+
+/// <summary>
+/// Ответ на запрос отправки уведомления
+/// </summary>
+public record SendNotificationResponse(
+    int TotalSubscriptions,
+    string Message
+);

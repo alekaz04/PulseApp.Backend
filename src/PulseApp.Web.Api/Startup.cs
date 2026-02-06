@@ -39,7 +39,7 @@ public class Startup
             .AddPostgresLogging(Configuration);
 
         // Database
-        services.AddDbContext<PulseDataContext>(x => 
+        services.AddDbContext<PulseDataContext>(x =>
             x.UseNpgsql(Configuration.GetConnectionString(nameof(PulseDataContext))));
 
         // Push Notification Services
@@ -48,7 +48,7 @@ public class Startup
         services.AddScoped<IPushNotificationService, PushNotificationService>();
 
         // Hangfire
-        string connectionString = Configuration.GetConnectionString("DefaultConnection") 
+        string connectionString = Configuration.GetConnectionString("PulseDataContext")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found");
 
         services.AddHangfire(config =>
@@ -71,11 +71,12 @@ public class Startup
             {
                 policy.WithOrigins(
                         "https://localhost:4200",
-                        "http://localhost:4200"
+                        "http://localhost:4200",
+                        "http://localhost:8080",
+                        "https://localhost:8080"
                     )
                     .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials();
+                    .AllowAnyHeader();
             });
         });
     }
@@ -99,7 +100,7 @@ public class Startup
         // Hangfire Dashboard
         app.UseHangfireDashboard("/admin/hangfire");
 
-        app.UseEndpoints(x => 
+        app.UseEndpoints(x =>
         {
             x.MapControllers();
             x.MapHangfireDashboard();

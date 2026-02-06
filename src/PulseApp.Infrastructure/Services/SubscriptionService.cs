@@ -19,19 +19,18 @@ public class SubscriptionService : ISubscriptionService
         _context = context;
     }
 
-    public async Task<Guid> CreateSubscriptionAsync(
+    public async Task<Guid> CreateOrUpdateSubscriptionAsync(
         string endpoint,
         string p256dh,
         string auth,
         string? userAgent)
     {
-        // Проверяем, существует ли уже такая подписка
-        PushSubscription? existing = await _context.PushSubscriptions
+        var existing = await _context.PushSubscriptions
             .FirstOrDefaultAsync(x => x.Endpoint == endpoint);
 
-        if (existing != null)
+        if (existing is not null)
         {
-            // Обновляем существующую подписку
+            // Если подписка существует, то обновляем её
             existing.P256dh = p256dh;
             existing.Auth = auth;
             existing.IsActive = true;
@@ -44,7 +43,7 @@ public class SubscriptionService : ISubscriptionService
         }
 
         // Создаем новую подписку
-        PushSubscription subscription = new PushSubscription
+        var subscription = new PushSubscription
         {
             Id = Guid.NewGuid(),
             Endpoint = endpoint,
@@ -63,10 +62,10 @@ public class SubscriptionService : ISubscriptionService
 
     public async Task DeleteSubscriptionByEndpointAsync(string endpoint)
     {
-        PushSubscription? subscription = await _context.PushSubscriptions
+        var subscription = await _context.PushSubscriptions
             .FirstOrDefaultAsync(x => x.Endpoint == endpoint);
 
-        if (subscription != null)
+        if (subscription is not null)
         {
             _context.PushSubscriptions.Remove(subscription);
             await _context.SaveChangesAsync();
@@ -82,7 +81,7 @@ public class SubscriptionService : ISubscriptionService
 
     public async Task DeactivateSubscriptionAsync(Guid id)
     {
-        PushSubscription? subscription = await _context.PushSubscriptions
+        var subscription = await _context.PushSubscriptions
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (subscription != null)

@@ -13,7 +13,7 @@ public interface ISubscriptionService
     /// <summary>
     /// Создать новую подписку
     /// </summary>
-    Task<Guid> CreateSubscriptionAsync(string endpoint, string p256dh, string auth, string? userAgent);
+    Task<Guid> CreateOrUpdateSubscriptionAsync(string endpoint, string p256dh, string auth, string? userAgent);
 
     /// <summary>
     /// Удалить подписку по endpoint

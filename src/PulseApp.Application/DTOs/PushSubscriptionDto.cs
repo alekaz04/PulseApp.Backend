@@ -60,3 +60,11 @@ public record SendNotificationResponse(
     int TotalSubscriptions,
     string Message
 );
+
+/// <summary>
+/// Ответ на запрос отписки от push-уведомлений
+/// </summary>
+public record UnsubscribeResponse(
+    bool Success,
+    string Message
+);

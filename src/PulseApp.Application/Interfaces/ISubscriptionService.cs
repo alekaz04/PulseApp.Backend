@@ -24,4 +24,9 @@ public interface ISubscriptionService
     /// Деактивировать подписку
     /// </summary>
     Task DeactivateSubscription(Guid id, CancellationToken token);
+
+    /// <summary>
+    /// Деактивировать подписку по endpoint
+    /// </summary>
+    Task<bool> DeactivateSubscriptionByEndpoint(string endpoint, CancellationToken token);
 }

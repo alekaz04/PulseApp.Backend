@@ -78,4 +78,22 @@ public class SubscriptionService : ISubscriptionService
             await _context.SaveChangesAsync(token);
         }
     }
+
+    /// <inheritdoc/>
+    public async Task<bool> DeactivateSubscriptionByEndpoint(string endpoint, CancellationToken token)
+    {
+        var subscription = await _context.Set<SubscriptionPush>()
+            .FirstOrDefaultAsync(x => x.Endpoint == endpoint, token);
+
+        if (subscription is null)
+        {
+            return false;
+        }
+
+        subscription.IsActive = false;
+        _context.Set<SubscriptionPush>().Update(subscription);
+        await _context.SaveChangesAsync(token);
+
+        return true;
+    }
 }

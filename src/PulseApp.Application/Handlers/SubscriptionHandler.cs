@@ -41,4 +41,24 @@ public class SubscriptionHandler : ISubscriptionHandler
 
         return new SubscribeResponse(subscriptionId, "Subscription created successfully");
     }
+
+    /// <inheritdoc/>
+    public async Task<UnsubscribeResponse> Unsubscribe(string endpoint, CancellationToken token)
+    {
+        if (string.IsNullOrWhiteSpace(endpoint))
+        {
+            throw new CommonErrorException("Invalid endpoint");
+        }
+
+        bool success = await _service.DeactivateSubscriptionByEndpoint(endpoint, token);
+
+        if (!success)
+        {
+            _logger.LogWarning("Subscription not found for endpoint: {Endpoint}", endpoint);
+            return new UnsubscribeResponse(false, "Subscription not found");
+        }
+
+        _logger.LogInformation("Subscription deactivated for endpoint: {Endpoint}", endpoint);
+        return new UnsubscribeResponse(true, "Successfully unsubscribed");
+    }
 }

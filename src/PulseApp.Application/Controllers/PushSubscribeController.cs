@@ -27,4 +27,13 @@ public class PushSubscribeController : ControllerBase
     {
         return await _handler.Subscribe(request, token);
     }
+
+    /// <summary>
+    /// Отписаться от push-уведомлений
+    /// </summary>
+    [HttpDelete]
+    public async Task<ActionResult<UnsubscribeResponse>> Unsubscribe([FromQuery] string endpoint, CancellationToken token)
+    {
+        return await _handler.Unsubscribe(endpoint, token);
+    }
 }

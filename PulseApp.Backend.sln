@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PulseApp.Web.Api", "src\PulseApp.Web.Api\PulseApp.Web.Api.csproj", "{B1FCD2AC-5953-4DBE-8A70-A5CBD8903AB2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{734923D6-68EC-4482-B881-8708BFE3E887}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PulseApp.Domain", "src\PulseApp.Domain\PulseApp.Domain.csproj", "{663A8671-948D-437D-96DB-930F1359D246}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PulseApp.Application", "src\PulseApp.Application\PulseApp.Application.csproj", "{D7FB2136-A43D-4538-A147-D5C248C15092}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PulseApp.Infrastructure", "src\PulseApp.Infrastructure\PulseApp.Infrastructure.csproj", "{207A0306-E7B0-4C96-AC00-1274B31933C6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{439D9A98-FA06-4018-8BD3-082B87248997}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		global.json = global.json
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PulseApp.Common", "src\PulseApp.Common\PulseApp.Common.csproj", "{7D97E5CE-B68F-43CC-A0DF-F54E9F3D4499}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PulseApp.Logging", "src\PulseApp.Logging\PulseApp.Logging.csproj", "{B58AF3F1-BDEA-4DF2-89B5-F5991174FE07}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1FCD2AC-5953-4DBE-8A70-A5CBD8903AB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1FCD2AC-5953-4DBE-8A70-A5CBD8903AB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1FCD2AC-5953-4DBE-8A70-A5CBD8903AB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1FCD2AC-5953-4DBE-8A70-A5CBD8903AB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{663A8671-948D-437D-96DB-930F1359D246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{663A8671-948D-437D-96DB-930F1359D246}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{663A8671-948D-437D-96DB-930F1359D246}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{663A8671-948D-437D-96DB-930F1359D246}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7FB2136-A43D-4538-A147-D5C248C15092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7FB2136-A43D-4538-A147-D5C248C15092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7FB2136-A43D-4538-A147-D5C248C15092}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7FB2136-A43D-4538-A147-D5C248C15092}.Release|Any CPU.Build.0 = Release|Any CPU
+		{207A0306-E7B0-4C96-AC00-1274B31933C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{207A0306-E7B0-4C96-AC00-1274B31933C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{207A0306-E7B0-4C96-AC00-1274B31933C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{207A0306-E7B0-4C96-AC00-1274B31933C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D97E5CE-B68F-43CC-A0DF-F54E9F3D4499}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D97E5CE-B68F-43CC-A0DF-F54E9F3D4499}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D97E5CE-B68F-43CC-A0DF-F54E9F3D4499}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D97E5CE-B68F-43CC-A0DF-F54E9F3D4499}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B58AF3F1-BDEA-4DF2-89B5-F5991174FE07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B58AF3F1-BDEA-4DF2-89B5-F5991174FE07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B58AF3F1-BDEA-4DF2-89B5-F5991174FE07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B58AF3F1-BDEA-4DF2-89B5-F5991174FE07}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B1FCD2AC-5953-4DBE-8A70-A5CBD8903AB2} = {734923D6-68EC-4482-B881-8708BFE3E887}
+		{663A8671-948D-437D-96DB-930F1359D246} = {734923D6-68EC-4482-B881-8708BFE3E887}
+		{D7FB2136-A43D-4538-A147-D5C248C15092} = {734923D6-68EC-4482-B881-8708BFE3E887}
+		{207A0306-E7B0-4C96-AC00-1274B31933C6} = {734923D6-68EC-4482-B881-8708BFE3E887}
+		{7D97E5CE-B68F-43CC-A0DF-F54E9F3D4499} = {734923D6-68EC-4482-B881-8708BFE3E887}
+		{B58AF3F1-BDEA-4DF2-89B5-F5991174FE07} = {734923D6-68EC-4482-B881-8708BFE3E887}
+	EndGlobalSection
+EndGlobal

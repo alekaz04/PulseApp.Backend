@@ -8,13 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PulseApp.Common\PulseApp.Common.csproj" />
-      <ProjectReference Include="..\PulseApp.Infrastructure\PulseApp.Infrastructure.csproj" />
-      <ProjectReference Include="..\PulseApp.Logging\PulseApp.Logging.csproj" />
-      <ProjectReference Include="..\PulseApp.Application\PulseApp.Application.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Hangfire.AspNetCore" Version="1.8.14" />
       <PackageReference Include="Hangfire.Core" Version="1.8.14" />
       <PackageReference Include="Hangfire.PostgreSql" Version="1.20.9" />
@@ -23,6 +16,14 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="WebPush" Version="1.0.12" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Common\PulseApp.Application\PulseApp.Application.csproj" />
+      <ProjectReference Include="..\Common\PulseApp.Common\PulseApp.Common.csproj" />
+      <ProjectReference Include="..\Common\PulseApp.Domain\PulseApp.Domain.csproj" />
+      <ProjectReference Include="..\Infrastructure\PulseApp.Infrastructure\PulseApp.Infrastructure.csproj" />
+      <ProjectReference Include="..\Infrastructure\PulseApp.Logging\PulseApp.Logging.csproj" />
     </ItemGroup>
 
 </Project>

@@ -28,6 +28,6 @@ public class VapidController : ControllerBase
     public ActionResult<string> GetVapidPublicKey()
     {
         string publicKey = _vapidService.GetPublicKeyAsync();
-        return Ok(new { PublicKey = publicKey});
+        return Ok(new { PublicKey = publicKey });
     }
 }

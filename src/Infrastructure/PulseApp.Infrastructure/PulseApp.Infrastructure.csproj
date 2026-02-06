@@ -12,12 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="EntityConfigurations\" />
+      <ProjectReference Include="..\..\Common\PulseApp.Domain\PulseApp.Domain.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\PulseApp.Domain\PulseApp.Domain.csproj" />
-    </ItemGroup>
-
 
 </Project>

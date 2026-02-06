@@ -19,7 +19,7 @@ public class AdministrationHandler : IAdministrationHandler
     /// <inheritdoc cref="ILogger{T}"/>
     private readonly ILogger<AdministrationHandler> _logger;
 
-    public AdministrationHandler(ISubscriptionService service,IPushNotificationService pushNotificationService, ILogger<AdministrationHandler> logger)
+    public AdministrationHandler(ISubscriptionService service, IPushNotificationService pushNotificationService, ILogger<AdministrationHandler> logger)
     {
         _service = service;
         _pushNotificationService = pushNotificationService;

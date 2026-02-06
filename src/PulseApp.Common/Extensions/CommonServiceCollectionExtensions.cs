@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace PulseApp.Extensions.DependencyInjection;
+namespace PulseApp.Common.Extensions;
 
 /// <summary>
 /// Класс расширения для <see cref="IServiceCollection"/>

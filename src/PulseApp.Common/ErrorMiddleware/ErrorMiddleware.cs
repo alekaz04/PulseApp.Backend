@@ -4,7 +4,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
-namespace PulseApp.Common;
+namespace PulseApp.Common.ErrorMiddleware;
 
 /// <summary>
 /// Миддлвар для отлова ошибок

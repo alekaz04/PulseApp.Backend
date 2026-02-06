@@ -2,11 +2,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NpgsqlTypes;
 using PulseApp.Common;
-using PulseApp.Logging;
+using PulseApp.Logging.Models;
+using PulseApp.Logging.PostgresLoggerConfiguration.ColumnWriters;
 using Serilog;
 using Serilog.Sinks.PostgreSQL.ColumnWriters;
 
-namespace PulseApp.Extensions.DependencyInjection;
+namespace PulseApp.Logging.Extensions;
 
 /// <summary>
 /// Класс расширений <see cref="IServiceCollection"/> для модуля логирования

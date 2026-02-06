@@ -4,10 +4,11 @@
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
-using PulseApp.Application.Interfaces;
-using PulseApp.Extensions.DependencyInjection;
+using PulseApp.Application;
+using PulseApp.Common.Extensions;
+using PulseApp.Domain.Options;
 using PulseApp.Infrastructure;
-using PulseApp.Infrastructure.Services;
+using PulseApp.Logging.Extensions;
 
 namespace PulseApp.Web.Api;
 
@@ -18,6 +19,8 @@ public class Startup
 {
     /// <inheritdoc cref="IConfiguration"/>
     private IConfiguration Configuration { get; }
+
+    private const string CorsPolicy = "PWAPolicy";
 
     /// <summary>
     /// Инициализация приложения
@@ -36,27 +39,21 @@ public class Startup
     {
         services.AddControllers();
         services.AddCommon(Configuration)
-            .AddPostgresLogging(Configuration);
+            .AddPostgresLogging(Configuration)
+            .AddApplicationServices();
 
-        // Database
         services.AddDbContext<PulseDataContext>(x =>
             x.UseNpgsql(Configuration.GetConnectionString(nameof(PulseDataContext))));
 
-        // Push Notification Services
-        services.AddScoped<IVapidService, VapidService>();
-        services.AddScoped<ISubscriptionService, SubscriptionService>();
-        services.AddScoped<IPushNotificationService, PushNotificationService>();
-
         // Hangfire
-        string connectionString = Configuration.GetConnectionString("PulseDataContext")
-            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found");
+        string connectionString = Configuration.GetConnectionString(nameof(PulseDataContext))
+                                 ?? throw new InvalidOperationException("Connection string 'PulseDataContext' not found");
+
+        services.Configure<VapidOptions>(Configuration.GetSection(nameof(VapidOptions)));
 
         services.AddHangfire(config =>
         {
-            config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UsePostgreSqlStorage(options =>
+            config.UsePostgreSqlStorage(options =>
                 {
                     options.UseNpgsqlConnection(connectionString);
                 });
@@ -64,17 +61,12 @@ public class Startup
 
         services.AddHangfireServer();
 
-        // CORS для PWA
         services.AddCors(options =>
         {
-            options.AddPolicy("PWAPolicy", policy =>
+            options.AddPolicy(CorsPolicy, policy =>
             {
-                policy.WithOrigins(
-                        "https://localhost:4200",
-                        "http://localhost:4200",
-                        "http://localhost:8080",
-                        "https://localhost:8080"
-                    )
+                policy.WithOrigins(Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? [""])
+                    .SetIsOriginAllowed(origin => origin.StartsWith("http://localhost") || origin.StartsWith("http://127.0.0.1"))
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             });
@@ -92,12 +84,10 @@ public class Startup
 
         app.UseErrorMiddleware();
 
-        // CORS должен быть до UseRouting
-        app.UseCors("PWAPolicy");
+        app.UseCors(CorsPolicy);
 
         app.UseRouting();
 
-        // Hangfire Dashboard
         app.UseHangfireDashboard("/admin/hangfire");
 
         app.UseEndpoints(x =>

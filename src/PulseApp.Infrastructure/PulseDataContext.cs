@@ -16,21 +16,6 @@ public class PulseDataContext : DbContext
 
     }
 
-    /// <summary>
-    /// Комплименты
-    /// </summary>
-    public DbSet<Compliments> Compliments { get; set; } = null!;
-
-    /// <summary>
-    /// Подписки на push-уведомления
-    /// </summary>
-    public DbSet<PushSubscription> PushSubscriptions { get; set; } = null!;
-
-    /// <summary>
-    /// Настройки приложения
-    /// </summary>
-    public DbSet<AppSetting> AppSettings { get; set; } = null!;
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

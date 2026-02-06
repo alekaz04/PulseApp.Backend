@@ -6,7 +6,7 @@ namespace PulseApp.Domain.Entities;
 /// <summary>
 /// Сущность подписки на push-уведомления
 /// </summary>
-public class PushSubscription
+public class SubscriptionPush
 {
     /// <summary>
     /// Идентификатор

@@ -2,7 +2,7 @@ using NpgsqlTypes;
 using Serilog.Events;
 using Serilog.Sinks.PostgreSQL.ColumnWriters;
 
-namespace PulseApp.Logging;
+namespace PulseApp.Logging.PostgresLoggerConfiguration.ColumnWriters;
 
 /// <summary>
 /// Создание GUID записи лога

@@ -1,4 +1,4 @@
-namespace PulseApp.Common;
+namespace PulseApp.Common.ErrorMiddleware;
 
 /// <summary>
 /// Сообщение об ошибке

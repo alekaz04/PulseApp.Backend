@@ -1,6 +1,3 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PulseApp.Domain.Entities;
@@ -10,9 +7,9 @@ namespace PulseApp.Infrastructure.EntityConfigurations;
 /// <summary>
 /// Конфигурация сущности PushSubscription для EF Core
 /// </summary>
-public class PushSubscriptionConfiguration : IEntityTypeConfiguration<PushSubscription>
+public class PushSubscriptionConfiguration : IEntityTypeConfiguration<SubscriptionPush>
 {
-    public void Configure(EntityTypeBuilder<PushSubscription> builder)
+    public void Configure(EntityTypeBuilder<SubscriptionPush> builder)
     {
         builder.HasKey(x => x.Id);
 

@@ -13,20 +13,15 @@ public interface ISubscriptionService
     /// <summary>
     /// Создать новую подписку
     /// </summary>
-    Task<Guid> CreateOrUpdateSubscriptionAsync(string endpoint, string p256dh, string auth, string? userAgent);
-
-    /// <summary>
-    /// Удалить подписку по endpoint
-    /// </summary>
-    Task DeleteSubscriptionByEndpointAsync(string endpoint);
+    Task<Guid> CreateOrUpdateSubscription(string endpoint, string p256dh, string auth, string? userAgent, CancellationToken token);
 
     /// <summary>
     /// Получить все активные подписки
     /// </summary>
-    Task<List<PushSubscription>> GetActiveSubscriptionsAsync();
+    Task<List<SubscriptionPush>> GetActiveSubscriptions(CancellationToken token);
 
     /// <summary>
     /// Деактивировать подписку
     /// </summary>
-    Task DeactivateSubscriptionAsync(Guid id);
+    Task DeactivateSubscription(Guid id, CancellationToken token);
 }

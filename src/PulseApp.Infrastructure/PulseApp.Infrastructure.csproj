@@ -9,7 +9,6 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.2" />
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
-        <PackageReference Include="WebPush" Version="1.0.12" />
     </ItemGroup>
 
     <ItemGroup>
@@ -18,7 +17,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PulseApp.Domain\PulseApp.Domain.csproj" />
-      <ProjectReference Include="..\PulseApp.Application\PulseApp.Application.csproj" />
     </ItemGroup>
 
 

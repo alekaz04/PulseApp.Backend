@@ -12,20 +12,6 @@ namespace PulseApp.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AppSetting",
-                columns: table => new
-                {
-                    Key = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Value = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppSetting", x => x.Key);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Compliments",
                 columns: table => new
                 {
@@ -42,7 +28,7 @@ namespace PulseApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PushSubscriptions",
+                name: "SubscriptionPush",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -55,7 +41,7 @@ namespace PulseApp.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PushSubscriptions", x => x.Id);
+                    table.PrimaryKey("PK_SubscriptionPush", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
@@ -64,8 +50,8 @@ namespace PulseApp.Infrastructure.Migrations
                 column: "IsActive");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PushSubscriptions_Endpoint",
-                table: "PushSubscriptions",
+                name: "IX_SubscriptionPush_Endpoint",
+                table: "SubscriptionPush",
                 column: "Endpoint",
                 unique: true);
         }
@@ -74,13 +60,10 @@ namespace PulseApp.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AppSetting");
-
-            migrationBuilder.DropTable(
                 name: "Compliments");
 
             migrationBuilder.DropTable(
-                name: "PushSubscriptions");
+                name: "SubscriptionPush");
         }
     }
 }

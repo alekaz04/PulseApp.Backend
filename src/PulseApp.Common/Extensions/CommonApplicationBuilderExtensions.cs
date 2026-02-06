@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Builder;
-using PulseApp.Common;
 
-namespace PulseApp.Extensions.DependencyInjection;
+namespace PulseApp.Common.Extensions;
 
 /// <summary>
 /// Класс расширений для <see cref="IApplicationBuilder"/>
@@ -29,7 +28,7 @@ public static class CommonApplicationBuilderExtensions
         /// </summary>
         public IApplicationBuilder UseErrorMiddleware()
         {
-            app.UseMiddleware<ErrorMiddleware>();
+            app.UseMiddleware<ErrorMiddleware.ErrorMiddleware>();
             return app;
         }
     }

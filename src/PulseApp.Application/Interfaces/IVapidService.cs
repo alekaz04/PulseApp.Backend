@@ -1,7 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
-using PulseApp.Application.Models;
+using PulseApp.Domain.Options;
 
 namespace PulseApp.Application.Interfaces;
 
@@ -11,12 +8,12 @@ namespace PulseApp.Application.Interfaces;
 public interface IVapidService
 {
     /// <summary>
-    /// Получить или сгенерировать VAPID ключи
+    /// Получить VAPID ключи
     /// </summary>
-    Task<VapidKeys> GetOrGenerateVapidKeysAsync();
+    VapidOptions GetVapidKeys();
 
     /// <summary>
     /// Получить публичный ключ
     /// </summary>
-    Task<string> GetPublicKeyAsync();
+    string GetPublicKeyAsync();
 }

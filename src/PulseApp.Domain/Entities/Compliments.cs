@@ -1,7 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
-namespace PulseApp.Domain.Entities;
+﻿namespace PulseApp.Domain.Entities;
 
 /// <summary>
 /// Сущность комплимента
@@ -21,7 +18,7 @@ public class Compliments
     /// <summary>
     /// Категория
     /// </summary>
-    public string? Category {get; set;}
+    public string? Category { get; set; }
 
     /// <summary>
     /// Флаг активации

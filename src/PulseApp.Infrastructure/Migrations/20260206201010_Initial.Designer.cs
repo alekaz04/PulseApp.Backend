@@ -12,7 +12,7 @@ using PulseApp.Infrastructure;
 namespace PulseApp.Infrastructure.Migrations
 {
     [DbContext(typeof(PulseDataContext))]
-    [Migration("20260206131645_Initial")]
+    [Migration("20260206201010_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,28 +24,6 @@ namespace PulseApp.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("PulseApp.Domain.Entities.AppSetting", b =>
-                {
-                    b.Property<string>("Key")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)");
-
-                    b.HasKey("Key");
-
-                    b.ToTable("AppSetting", (string)null);
-                });
 
             modelBuilder.Entity("PulseApp.Domain.Entities.Compliments", b =>
                 {
@@ -80,7 +58,7 @@ namespace PulseApp.Infrastructure.Migrations
                     b.ToTable("Compliments");
                 });
 
-            modelBuilder.Entity("PulseApp.Domain.Entities.PushSubscription", b =>
+            modelBuilder.Entity("PulseApp.Domain.Entities.SubscriptionPush", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -118,7 +96,7 @@ namespace PulseApp.Infrastructure.Migrations
                     b.HasIndex("Endpoint")
                         .IsUnique();
 
-                    b.ToTable("PushSubscriptions");
+                    b.ToTable("SubscriptionPush");
                 });
 #pragma warning restore 612, 618
         }

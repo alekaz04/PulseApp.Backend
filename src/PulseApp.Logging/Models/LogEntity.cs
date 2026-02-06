@@ -1,4 +1,4 @@
-namespace PulseApp.Logging;
+namespace PulseApp.Logging.Models;
 
 /// <summary>
 /// Сущность записи лога

@@ -16,7 +16,7 @@ public interface IPushNotificationService
     /// <summary>
     /// Отправить push-уведомление всем подписчикам
     /// </summary>
-    Task SendNotificationToAllAsync(PushNotificationPayload payload, CancellationToken token);
+    Task SendNotificationToAllSubscribes(PushNotificationPayload payload, CancellationToken token);
 
     /// <summary>
     /// Отправить push-уведомление подписчикам

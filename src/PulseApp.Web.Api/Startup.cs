@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PulseApp.Application;
 using PulseApp.Common.Extensions;
 using PulseApp.Domain.Options;
+using PulseApp.Extensions.DependencyInjection;
 using PulseApp.Infrastructure;
 using PulseApp.Logging.Extensions;
 
@@ -42,22 +43,10 @@ public class Startup
         services.AddDbContext<PulseDataContext>(x =>
             x.UseNpgsql(Configuration.GetConnectionString(nameof(PulseDataContext))));
 
-        // Hangfire
-        string connectionString = Configuration.GetConnectionString(nameof(PulseDataContext))
-                                 ?? throw new InvalidOperationException("Connection string 'PulseDataContext' not found");
-
         services.Configure<VapidOptions>(Configuration.GetSection(nameof(VapidOptions)));
 
-        services.AddHangfire(config =>
-        {
-            config.UsePostgreSqlStorage(options =>
-                {
-                    options.UseNpgsqlConnection(connectionString);
-                });
-        });
 
-        services.AddHangfireServer();
-
+        services.AddCustomHangfire(Configuration);
         services.AddCors(options =>
         {
             options.AddPolicy(CorsPolicy, policy =>
@@ -85,7 +74,7 @@ public class Startup
 
         app.UseRouting();
 
-        app.UseHangfireDashboard("/admin/hangfire");
+        app.UseCustomHangfire();
 
         app.UseEndpoints(x =>
         {

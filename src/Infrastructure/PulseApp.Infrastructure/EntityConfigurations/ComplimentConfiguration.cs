@@ -10,9 +10,9 @@ namespace PulseApp.Infrastructure.EntityConfigurations;
 /// <summary>
 /// Конфигурация сущности Compliments для EF Core
 /// </summary>
-public class ComplimentsConfiguration : IEntityTypeConfiguration<Compliments>
+public class ComplimentConfiguration : IEntityTypeConfiguration<Compliment>
 {
-    public void Configure(EntityTypeBuilder<Compliments> builder)
+    public void Configure(EntityTypeBuilder<Compliment> builder)
     {
         builder.HasKey(x => x.Id);
 
@@ -23,12 +23,17 @@ public class ComplimentsConfiguration : IEntityTypeConfiguration<Compliments>
             .IsRequired()
             .HasMaxLength(500);
 
-        builder.Property(x => x.Category)
+        builder.Property(x => x.Title)
+            .IsRequired()
             .HasMaxLength(100);
 
-        builder.Property(x => x.IsActive)
+        builder.Property(x => x.IsBeenPushed)
             .IsRequired()
-            .HasDefaultValue(true);
+            .HasDefaultValue(false);
+
+        builder.Property(x => x.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
 
         builder.Property(x => x.CreatedAt)
             .IsRequired();
@@ -36,6 +41,6 @@ public class ComplimentsConfiguration : IEntityTypeConfiguration<Compliments>
         builder.Property(x => x.UpdatedAt)
             .IsRequired();
 
-        builder.HasIndex(x => x.IsActive);
+        builder.HasIndex(x => x.IsBeenPushed);
     }
 }

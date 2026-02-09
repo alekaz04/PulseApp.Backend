@@ -3,7 +3,7 @@
 /// <summary>
 /// Сущность комплимента
 /// </summary>
-public class Compliments
+public class Compliment
 {
     /// <summary>
     /// Идентификатор
@@ -16,14 +16,19 @@ public class Compliments
     public string Text { get; set; } = null!;
 
     /// <summary>
-    /// Категория
+    /// Заголовок
     /// </summary>
-    public string? Category { get; set; }
+    public string Title { get; set; } = null!;
 
     /// <summary>
-    /// Флаг активации
+    /// Флаг удаления
     /// </summary>
-    public bool IsActive { get; set; }
+    public bool IsDeleted { get; set; }
+
+    /// <summary>
+    /// Флаг уже отправленного комплимента
+    /// </summary>
+    public bool IsBeenPushed { get; set; }
 
     /// <summary>
     /// Дата создания

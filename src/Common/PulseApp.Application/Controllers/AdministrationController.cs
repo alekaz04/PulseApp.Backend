@@ -8,7 +8,7 @@ namespace PulseApp.Application.Controllers;
 /// Контроллер для администратора системы
 /// </summary>
 [ApiController]
-[Route("api/push")]
+[Route("api/admin")]
 public class AdministrationController : ControllerBase
 {
     /// <inheritdoc cref="IAdministrationHandler"/>
@@ -22,7 +22,7 @@ public class AdministrationController : ControllerBase
     /// <summary>
     /// Отправить push-уведомление всем подписчикам
     /// </summary>
-    [HttpPost("all")]
+    [HttpPost("push/all")]
     public async Task<ActionResult<SendNotificationResponse>> SendToAll([FromBody] SendNotificationRequest request, CancellationToken token)
     {
         return await _handler.SendToAll(request, token);

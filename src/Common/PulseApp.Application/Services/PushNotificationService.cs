@@ -89,7 +89,7 @@ public class PushNotificationService : IPushNotificationService
     }
 
     /// <inheritdoc/>
-    public async Task SendNotificationToAllAsync(PushNotificationPayload payload, CancellationToken token)
+    public async Task SendNotificationToAllSubscribes(PushNotificationPayload payload, CancellationToken token)
     {
         var subscriptions = await _subscriptionService.GetActiveSubscriptions(token);
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PulseApp.Application.DTOs;
 using PulseApp.Application.Interfaces;
+using PulseApp.Authentication;
 
 namespace PulseApp.Application.Controllers;
 
@@ -23,6 +24,7 @@ public class AdministrationController : ControllerBase
     /// Отправить push-уведомление всем подписчикам
     /// </summary>
     [HttpPost("push/all")]
+    [ApiKey]
     public async Task<ActionResult<SendNotificationResponse>> SendToAll([FromBody] SendNotificationRequest request, CancellationToken token)
     {
         return await _handler.SendToAll(request, token);

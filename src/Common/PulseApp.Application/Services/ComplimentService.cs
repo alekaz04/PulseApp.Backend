@@ -24,6 +24,7 @@ public class ComplimentService : IComplimentService
         return _context.SaveChangesAsync(token);
     }
 
+    /// <inheritdoc/>
     public Task CreateBatchCompliment(List<Compliment> compliments, CancellationToken token)
     {
         _context.AddRange(compliments);
@@ -35,7 +36,7 @@ public class ComplimentService : IComplimentService
     public async Task<Compliment> GetRandomCompliment(CancellationToken token)
     {
         var compliment = await _context.Set<Compliment>()
-            .Where(x => x.IsBeenPushed != false && x.IsDeleted != false)
+            .Where(x => x.IsBeenPushed == false && x.IsDeleted == false)
             .OrderBy(o => Guid.NewGuid())
             .Take(1)
             .FirstOrDefaultAsync(token);

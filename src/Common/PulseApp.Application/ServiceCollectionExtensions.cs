@@ -21,8 +21,11 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ISubscriptionService, SubscriptionService>();
         services.AddScoped<IPushNotificationService, PushNotificationService>();
 
+        services.AddScoped<IComplimentService, ComplimentService>();
+
         services.AddScoped<IAdministrationHandler, AdministrationHandler>();
         services.AddScoped<ISubscriptionHandler, SubscriptionHandler>();
+        services.AddScoped<IComplimentHandler, ComplimentHandler>();
 
         services.AddHangfireJob<GiveComplimentJob>();
 

@@ -1,4 +1,5 @@
 ﻿using Hangfire;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PulseApp.Application.DTOs;
 using PulseApp.Application.Interfaces;
@@ -11,11 +12,8 @@ namespace PulseApp.Application.Jobs;
 /// </summary>
 public class GiveComplimentJob : IHangfireRecurringJob
 {
-    /// <inheritdoc cref="IComplimentService"/>
-    private readonly IComplimentService _complimentService;
-
-    /// <inheritdoc cref="IPushNotificationService"/>
-    private readonly IPushNotificationService _pushNotificationService;
+    /// <inheritdoc cref="IServiceProvider"/>
+    private readonly IServiceProvider _serviceProvider;
 
     /// <inheritdoc cref="ILogger{T}"/>
     private readonly ILogger<GiveComplimentJob> _logger;
@@ -28,21 +26,26 @@ public class GiveComplimentJob : IHangfireRecurringJob
     public RecurringJobOptions? JobOptions { get; } = new();
 
 
-    public GiveComplimentJob(IComplimentService complimentService, IPushNotificationService pushNotificationService, ILogger<GiveComplimentJob> logger)
+    public GiveComplimentJob(IServiceProvider serviceProvider, ILogger<GiveComplimentJob> logger)
     {
-        _complimentService = complimentService;
-        _pushNotificationService = pushNotificationService;
+        _serviceProvider = serviceProvider;
         _logger = logger;
     }
 
     public async Task Execute(CancellationToken token)
     {
         _logger.LogInformation("Start GiveComplimentJob");
-        var compliment = await _complimentService.GetRandomCompliment(token);
+
+        var complimentService = _serviceProvider.GetRequiredService<IComplimentService>();
+
+        var compliment = await complimentService.GetRandomCompliment(token);
 
         var complimentPayload = new PushNotificationPayload(compliment.Title, compliment.Text);
 
-        await _pushNotificationService.SendNotificationToAllSubscribes(complimentPayload, token);
+        var pushNotificationService = _serviceProvider.GetRequiredService<IPushNotificationService>();
+
+        await pushNotificationService.SendNotificationToAllSubscribes(complimentPayload, token);
+
         _logger.LogInformation("End GiveComplimentJob");
     }
 }

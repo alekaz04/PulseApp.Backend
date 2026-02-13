@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Common\PulseApp.Application\PulseApp.Application.csproj" />
+      <ProjectReference Include="..\Common\PulseApp.Authentication\PulseApp.Authentication.csproj" />
       <ProjectReference Include="..\Common\PulseApp.Common\PulseApp.Common.csproj" />
       <ProjectReference Include="..\Common\PulseApp.Domain\PulseApp.Domain.csproj" />
       <ProjectReference Include="..\Infrastructure\PulseApp.Hangfire\PulseApp.Hangfire.csproj" />

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PulseApp.Application.DTOs;
 using PulseApp.Application.Interfaces;
+using PulseApp.Authentication;
 
 namespace PulseApp.Application.Controllers;
 
@@ -23,6 +24,7 @@ public class ComplimentController : ControllerBase
     /// Создать комплимент
     /// </summary>
     [HttpPost]
+    [ApiKey]
     public async Task<IActionResult> CreateCompliment([FromBody] CreateComplimentDto complimentDto,
         CancellationToken token)
     {
@@ -35,6 +37,7 @@ public class ComplimentController : ControllerBase
     /// Создать комплимент
     /// </summary>
     [HttpPost("/batch")]
+    [ApiKey]
     public async Task<IActionResult> CreateBatchCompliment([FromBody] List<CreateComplimentDto> complimentDtos,
         CancellationToken token)
     {

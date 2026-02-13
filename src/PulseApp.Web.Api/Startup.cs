@@ -70,6 +70,8 @@ public class Startup
 
         app.UseErrorMiddleware();
 
+        app.UseApiProtection();
+
         app.UseCors(CorsPolicy);
 
         app.UseRouting();

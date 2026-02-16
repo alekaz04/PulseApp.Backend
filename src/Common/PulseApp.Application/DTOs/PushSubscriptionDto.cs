@@ -38,8 +38,8 @@ public record VapidPublicKeyResponse(
 public record PushNotificationPayload(
     string Title,
     string Body,
-    string? Icon = "/icons/icon-192x192.png",
-    string? Badge = "/icons/badge-72x72.png",
+    string? Icon = "/favicon/favicon-96x96.png",
+    string? Badge = "/favicon/web-app-manifest-192x192.png",
     Dictionary<string, object>? Data = null
 );
 

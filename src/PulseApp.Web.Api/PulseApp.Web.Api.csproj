@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>cbfa40a0-b6e5-49b9-a490-8e824c54dbaf</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,6 +23,12 @@
       <ProjectReference Include="..\Infrastructure\PulseApp.Hangfire\PulseApp.Hangfire.csproj" />
       <ProjectReference Include="..\Infrastructure\PulseApp.Infrastructure\PulseApp.Infrastructure.csproj" />
       <ProjectReference Include="..\Infrastructure\PulseApp.Logging\PulseApp.Logging.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

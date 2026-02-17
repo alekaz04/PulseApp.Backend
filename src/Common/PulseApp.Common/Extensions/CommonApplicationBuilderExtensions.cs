@@ -17,7 +17,7 @@ public static class CommonApplicationBuilderExtensions
             app.UseOpenApi();
             app.UseSwaggerUi(options =>
             {
-                options.Path = string.Empty;
+                options.Path = "/swagger";
                 options.DocumentTitle = "PulseApp API";
             });
             return app;

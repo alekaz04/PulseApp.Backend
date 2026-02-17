@@ -23,7 +23,10 @@ public static class PulseAppHangfireServiceCollectionExtensions
 
     public static IApplicationBuilder UseCustomHangfire(this IApplicationBuilder app)
     {
-        app.UseHangfireDashboard();
+        app.UseHangfireDashboard("/hangfire", new DashboardOptions()
+        {
+            AppPath = null
+        });
         return app;
     }
 

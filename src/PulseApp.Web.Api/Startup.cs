@@ -81,7 +81,6 @@ public class Startup
         app.UseEndpoints(x =>
         {
             x.MapControllers();
-            x.MapHangfireDashboard();
         });
     }
 }

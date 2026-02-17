@@ -47,10 +47,17 @@ public class ComplimentHandler : IComplimentHandler
     /// <inheritdoc/>
     public async Task<List<Guid>> CreateBatchCompliment(List<CreateComplimentDto> complimentDtos, CancellationToken token)
     {
-        var tasks = complimentDtos.Select(x => CreateCompliment(x, token)).ToList();
-        var results = await Task.WhenAll(tasks);
+        var compliments = complimentDtos.Select(x => new Compliment()
+        {
+            Id = Guid.NewGuid(),
+            Text = x.Text,
+            Title = x.Title,
+            CreatedAt = DateTimeOffset.UtcNow,
+            UpdatedAt = DateTimeOffset.UtcNow
+        }).ToList();
 
+        await _service.CreateBatchCompliment(compliments, token);
         _logger.LogInformation("Batch compliments create is complete");
-        return results.ToList();
+        return compliments.Select(x => x.Id).ToList();
     }
 }

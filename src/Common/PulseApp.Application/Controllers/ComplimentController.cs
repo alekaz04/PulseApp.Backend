@@ -36,7 +36,7 @@ public class ComplimentController : ControllerBase
     /// <summary>
     /// Создать комплимент
     /// </summary>
-    [HttpPost("/batch")]
+    [HttpPost("batch")]
     [ApiKey]
     public async Task<IActionResult> CreateBatchCompliment([FromBody] List<CreateComplimentDto> complimentDtos,
         CancellationToken token)

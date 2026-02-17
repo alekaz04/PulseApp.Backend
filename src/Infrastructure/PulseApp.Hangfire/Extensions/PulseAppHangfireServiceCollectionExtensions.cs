@@ -25,6 +25,8 @@ public static class PulseAppHangfireServiceCollectionExtensions
     {
         app.UseHangfireDashboard("/hangfire", new DashboardOptions()
         {
+            Authorization = new[] { new BasicAuthAuthorizationFilter("admin", "admin") },
+
             AppPath = null
         });
         return app;

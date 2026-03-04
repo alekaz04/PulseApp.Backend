@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using PulseApp.Application.DTOs;
-using PulseApp.Application.Interfaces;
+using PulseApp.Domain.Options;
 
 namespace PulseApp.Application.Controllers;
 
@@ -13,11 +14,11 @@ namespace PulseApp.Application.Controllers;
 public class VapidController : ControllerBase
 {
     /// <inheritdoc cref="IVapidService"/>
-    private readonly IVapidService _vapidService;
+    private readonly IOptions<VapidOptions> _vapidOptions;
 
-    public VapidController(IVapidService vapidService)
+    public VapidController(IOptions<VapidOptions> options)
     {
-        _vapidService = vapidService;
+        _vapidOptions = options;
     }
 
     /// <summary>
@@ -27,7 +28,7 @@ public class VapidController : ControllerBase
     [ProducesResponseType(typeof(VapidPublicKeyResponse), StatusCodes.Status200OK)]
     public ActionResult<string> GetVapidPublicKey()
     {
-        string publicKey = _vapidService.GetPublicKeyAsync();
+        string publicKey = _vapidOptions.Value.PublicKey;
         return Ok(new { PublicKey = publicKey });
     }
 }

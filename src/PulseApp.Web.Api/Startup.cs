@@ -1,6 +1,4 @@
-﻿using Hangfire;
-using Hangfire.PostgreSql;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PulseApp.Application;
 using PulseApp.Common.Extensions;
 using PulseApp.Domain.Options;
@@ -44,6 +42,7 @@ public class Startup
             x.UseNpgsql(Configuration.GetConnectionString(nameof(PulseDataContext))));
 
         services.Configure<VapidOptions>(Configuration.GetSection(nameof(VapidOptions)));
+        services.Configure<DatabaseOptions>(Configuration.GetSection(nameof(DatabaseOptions)));
 
 
         services.AddCustomHangfire(Configuration);

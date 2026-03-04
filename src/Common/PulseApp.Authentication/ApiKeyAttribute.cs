@@ -16,7 +16,7 @@ public class ApiKeyAttribute : Attribute, IAuthorizationFilter
 
         if (string.IsNullOrEmpty(requestKey) || requestKey != validKey)
         {
-            context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden);
+            context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);
         }
     }
 }

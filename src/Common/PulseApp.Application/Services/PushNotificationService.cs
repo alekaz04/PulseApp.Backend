@@ -1,10 +1,11 @@
 using System.Net;
 using System.Text.Json;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using PulseApp.Application.DTOs;
 using PulseApp.Application.Interfaces;
 using PulseApp.Domain.Entities;
+using PulseApp.Domain.Options;
 using WebPush;
 
 namespace PulseApp.Application.Services;
@@ -14,23 +15,20 @@ namespace PulseApp.Application.Services;
 /// </summary>
 public class PushNotificationService : IPushNotificationService
 {
-    /// <inheritdoc cref="IVapidService"/>
-    private readonly IVapidService _vapidService;
+    /// <inheritdoc cref="IOptions{T}"/>
+    private readonly IOptions<VapidOptions> _vapidOptions;
 
     /// <inheritdoc cref="ISubscriptionService"/>
     private readonly ISubscriptionService _subscriptionService;
 
-    /// <inheritdoc cref="IConfiguration"/>
-    private readonly IConfiguration _configuration;
 
     /// <inheritdoc cref="ILogger{T}"/>
     private readonly ILogger<PushNotificationService> _logger;
 
-    public PushNotificationService(IVapidService vapidService, ISubscriptionService subscriptionService, IConfiguration configuration, ILogger<PushNotificationService> logger)
+    public PushNotificationService(IOptions<VapidOptions> vapidOptions, ISubscriptionService subscriptionService, ILogger<PushNotificationService> logger)
     {
-        _vapidService = vapidService;
+        _vapidOptions = vapidOptions;
         _subscriptionService = subscriptionService;
-        _configuration = configuration;
         _logger = logger;
     }
 
@@ -39,14 +37,12 @@ public class PushNotificationService : IPushNotificationService
     {
         try
         {
-            var vapidKeys = _vapidService.GetVapidKeys();
-
-            string subject = _configuration["VapidSettings:Subject"] ?? "mailto:admin@pulseapp.com";
+            var vapidOptions = _vapidOptions.Value;
 
             var vapidDetails = new VapidDetails(
-                subject: subject,
-                publicKey: vapidKeys.PublicKey,
-                privateKey: vapidKeys.PrivateKey
+                subject: vapidOptions.Subject,
+                publicKey: vapidOptions.PublicKey,
+                privateKey: vapidOptions.PrivateKey
             );
 
             var pushSubscription = new PushSubscription(
@@ -114,7 +110,6 @@ public class PushNotificationService : IPushNotificationService
 
         await Task.WhenAll(tasks);
 
-        _logger.LogInformation("Push notifications sent to {Count} subscriptions", subscriptions.Count
-        );
+        _logger.LogInformation("Push notifications sent to {Count} subscriptions", subscriptions.Count);
     }
 }

@@ -6,6 +6,11 @@
 public class VapidOptions
 {
     /// <summary>
+    /// Почта автора уведомлений
+    /// </summary>
+    public string Subject { get; set; } = null!;
+
+    /// <summary>
     /// Публичный ключ
     /// </summary>
     public string PublicKey { get; set; } = null!;

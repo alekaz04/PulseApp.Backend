@@ -1,8 +1,10 @@
 using Hangfire;
+using Hangfire.Dashboard;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using PulseApp.Hangfire;
 using PulseApp.Infrastructure;
 
@@ -18,17 +20,22 @@ public static class PulseAppHangfireServiceCollectionExtensions
             .AddHangfireServer()
             .AddHostedService<HangfireBackgroundService>();
 
+        services.Configure<HangfireOptions>(configuration.GetSection(nameof(HangfireOptions)));
         return services;
     }
 
     public static IApplicationBuilder UseCustomHangfire(this IApplicationBuilder app)
     {
-        app.UseHangfireDashboard("/hangfire", new DashboardOptions()
-        {
-            Authorization = new[] { new BasicAuthAuthorizationFilter("admin", "admin") },
+        var options = app.ApplicationServices.GetRequiredService<IOptions<HangfireOptions>>().Value;
 
-            AppPath = null
+        app.UseHangfireDashboard(options.Url, new DashboardOptions
+        {
+            Authorization = new IDashboardAuthorizationFilter[]
+            {
+                new BasicAuthAuthorizationFilter(options.User, options.Password)
+            }
         });
+
         return app;
     }
 

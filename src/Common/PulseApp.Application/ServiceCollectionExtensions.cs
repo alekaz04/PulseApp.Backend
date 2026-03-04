@@ -17,7 +17,6 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        services.AddScoped<IVapidService, VapidService>();
         services.AddScoped<ISubscriptionService, SubscriptionService>();
         services.AddScoped<IPushNotificationService, PushNotificationService>();
 

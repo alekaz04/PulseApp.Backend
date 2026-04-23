@@ -28,4 +28,16 @@ public interface IComplimentService
     /// <returns>Комплимент</returns>
     /// <remarks>Полученный комплимент меняет свойство IsBeenPush на true</remarks>
     public Task<Compliment> GetRandomCompliment(CancellationToken token);
+
+    /// <summary>
+    /// Получить все комплименты
+    /// </summary>
+    /// <param name="token">Токен отмены запросы</param>
+    /// <returns>Список комплиментов</returns>
+    Task<List<Compliment>> GetAllCompliments(CancellationToken token);
+
+    /// <summary>
+    /// Получить комплимент по идентификатору
+    /// </summary>
+    Task<Compliment?> GetComplimentById(Guid complimentId, CancellationToken token);
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using PulseApp.Application.AutoMapper;
 using PulseApp.Application.Handlers;
 using PulseApp.Application.Interfaces;
 using PulseApp.Application.Jobs;
@@ -15,7 +17,7 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Добавить сервисы приложения
     /// </summary>
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<ISubscriptionService, SubscriptionService>();
         services.AddScoped<IPushNotificationService, PushNotificationService>();
@@ -27,6 +29,11 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IComplimentHandler, ComplimentHandler>();
 
         services.AddHangfireJob<GiveComplimentJob>();
+        services.AddAutoMapper(config =>
+        {
+            config.AddProfile<PulseAppProfile>();
+            config.LicenseKey = configuration["AutoMapper:LicenseKey"];
+        });
 
         return services;
     }

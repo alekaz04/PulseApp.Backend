@@ -25,8 +25,7 @@ public class ComplimentController : ControllerBase
     /// </summary>
     [HttpPost]
     [ApiKey]
-    public async Task<IActionResult> CreateCompliment([FromBody] CreateComplimentDto complimentDto,
-        CancellationToken token)
+    public async Task<IActionResult> CreateCompliment([FromBody] CreateComplimentDto complimentDto, CancellationToken token)
     {
         var result = await _handler.CreateCompliment(complimentDto, token);
 
@@ -43,6 +42,29 @@ public class ComplimentController : ControllerBase
     {
         var result = await _handler.CreateBatchCompliment(complimentDtos, token);
 
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Получить комплимент по идентификатору
+    /// </summary>
+    [HttpGet("{complimentId:guid}")]
+    [ApiKey]
+    public async Task<IActionResult> GetCompliment([FromRoute] Guid complimentId, CancellationToken token)
+    {
+        var result = await _handler.GetComplimentById(complimentId, token);
+
+        return result != null ? Ok(result) : NotFound();
+    }
+
+    /// <summary>
+    /// Получить все комплименты
+    /// </summary>
+    [HttpGet]
+    [ApiKey]
+    public async Task<IActionResult> GetCompliments(CancellationToken token)
+    {
+        var result = await _handler.GetAllCompliments(token);
         return Ok(result);
     }
 }

@@ -51,4 +51,19 @@ public class ComplimentService : IComplimentService
         await _context.SaveChangesAsync(token);
         return compliment;
     }
+
+    /// <inheritdoc/>
+    public async Task<List<Compliment>> GetAllCompliments(CancellationToken token)
+    {
+        return await _context.Set<Compliment>()
+            .AsNoTracking()
+            .ToListAsync(token);
+    }
+
+    public async Task<Compliment?> GetComplimentById(Guid complimentId, CancellationToken token)
+    {
+        return await _context.Set<Compliment>()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == complimentId, token);
+    }
 }

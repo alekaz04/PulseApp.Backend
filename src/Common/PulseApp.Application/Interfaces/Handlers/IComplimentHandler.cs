@@ -16,4 +16,11 @@ public interface IComplimentHandler
     /// Создать множество комплиментов
     /// </summary>
     Task<List<Guid>> CreateBatchCompliment(List<CreateComplimentDto> complimentDtos, CancellationToken token);
+
+    /// <summary>
+    /// Получить все комплименты
+    /// </summary>
+    Task<List<ComplimentDto>> GetAllCompliments(CancellationToken token);
+
+    Task<ComplimentDto?> GetComplimentById(Guid complimentId, CancellationToken token);
 }

@@ -36,7 +36,7 @@ public class Startup
         services.AddControllers();
         services.AddCommon(Configuration)
             .AddPostgresLogging(Configuration)
-            .AddApplicationServices();
+            .AddApplicationServices(Configuration);
 
         services.AddDbContext<PulseDataContext>(x =>
             x.UseNpgsql(Configuration.GetConnectionString(nameof(PulseDataContext))));

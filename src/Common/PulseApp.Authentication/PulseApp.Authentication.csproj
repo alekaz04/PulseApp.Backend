@@ -10,4 +10,8 @@
       <FrameworkReference Include="Microsoft.AspNetCore.App" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\PulseApp.Domain\PulseApp.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

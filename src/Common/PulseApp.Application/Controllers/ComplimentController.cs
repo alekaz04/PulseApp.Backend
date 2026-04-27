@@ -10,6 +10,7 @@ namespace PulseApp.Application.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/compliment")]
+[ApiKey]
 public class ComplimentController : ControllerBase
 {
     /// <inheritdoc cref="IComplimentHandler"/>
@@ -24,7 +25,6 @@ public class ComplimentController : ControllerBase
     /// Создать комплимент
     /// </summary>
     [HttpPost]
-    [ApiKey]
     public async Task<IActionResult> CreateCompliment([FromBody] CreateComplimentDto complimentDto, CancellationToken token)
     {
         var result = await _handler.CreateCompliment(complimentDto, token);
@@ -36,7 +36,6 @@ public class ComplimentController : ControllerBase
     /// Создать комплимент
     /// </summary>
     [HttpPost("batch")]
-    [ApiKey]
     public async Task<IActionResult> CreateBatchCompliment([FromBody] List<CreateComplimentDto> complimentDtos,
         CancellationToken token)
     {
@@ -49,7 +48,6 @@ public class ComplimentController : ControllerBase
     /// Получить комплимент по идентификатору
     /// </summary>
     [HttpGet("{complimentId:guid}")]
-    [ApiKey]
     public async Task<IActionResult> GetCompliment([FromRoute] Guid complimentId, CancellationToken token)
     {
         var result = await _handler.GetComplimentById(complimentId, token);
@@ -61,7 +59,6 @@ public class ComplimentController : ControllerBase
     /// Получить все комплименты
     /// </summary>
     [HttpGet]
-    [ApiKey]
     public async Task<IActionResult> GetCompliments(CancellationToken token)
     {
         var result = await _handler.GetAllCompliments(token);
@@ -72,7 +69,6 @@ public class ComplimentController : ControllerBase
     /// Обновить комплимент по идентификатору
     /// </summary>
     [HttpPut("{complimentId:guid}")]
-    [ApiKey]
     public async Task<IActionResult> UpdateCompliment([FromRoute] Guid complimentId, [FromBody] ComplimentUpdateDto complimentUpdateDto, CancellationToken token)
     {
         await _handler.UpdateComplimentById(complimentId, complimentUpdateDto, token);
@@ -84,7 +80,6 @@ public class ComplimentController : ControllerBase
     /// Удалить комплимент по идентификатору
     /// </summary>
     [HttpDelete("{complimentId:guid}")]
-    [ApiKey]
     public async Task<IActionResult> DeleteCompliment([FromRoute] Guid complimentId, CancellationToken token)
     {
         await _handler.DeleteComplimentById(complimentId, token);

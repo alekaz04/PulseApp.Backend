@@ -10,6 +10,7 @@ namespace PulseApp.Application.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/admin")]
+[ApiKey]
 public class AdministrationController : ControllerBase
 {
     /// <inheritdoc cref="IAdministrationHandler"/>
@@ -24,7 +25,6 @@ public class AdministrationController : ControllerBase
     /// Отправить push-уведомление всем подписчикам
     /// </summary>
     [HttpPost("push/all")]
-    [ApiKey]
     public async Task<ActionResult<SendNotificationResponse>> SendToAll([FromBody] SendNotificationRequest request, CancellationToken token)
     {
         return await _handler.SendToAll(request, token);

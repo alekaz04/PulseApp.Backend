@@ -1,17 +1,19 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PulseApp.Application.DTOs;
 using PulseApp.Application.Interfaces;
 using PulseApp.Common;
 using PulseApp.Domain.Entities;
+using PulseApp.Infrastructure;
 
 namespace PulseApp.Application.Handlers;
 
 /// <inheritdoc/>
 public class ComplimentHandler : IComplimentHandler
 {
-    /// <inheritdoc cref="IComplimentService"/>
-    private readonly IComplimentService _service;
+    /// <inheritdoc cref="PulseDataContext"/>
+    private readonly PulseDataContext _context;
 
     /// <inheritdoc cref="ILogger{T}"/>
     private readonly ILogger<ComplimentHandler> _logger;
@@ -19,9 +21,9 @@ public class ComplimentHandler : IComplimentHandler
     /// <inheritdoc cref="IMapper"/>
     private readonly IMapper _mapper;
 
-    public ComplimentHandler(IComplimentService service, ILogger<ComplimentHandler> logger, IMapper mapper)
+    public ComplimentHandler(PulseDataContext context, ILogger<ComplimentHandler> logger, IMapper mapper)
     {
-        _service = service;
+        _context = context;
         _logger = logger;
         _mapper = mapper;
     }
@@ -36,7 +38,8 @@ public class ComplimentHandler : IComplimentHandler
 
         var newCompliment = _mapper.Map<Compliment>(complimentDto);
 
-        await _service.CreateCompliment(newCompliment, token);
+        _context.Add(newCompliment);
+        await _context.SaveChangesAsync(token);
 
         _logger.LogInformation("Compliment created");
 
@@ -48,7 +51,9 @@ public class ComplimentHandler : IComplimentHandler
     {
         var compliments = _mapper.Map<List<Compliment>>(complimentDtos);
 
-        await _service.CreateBatchCompliment(compliments, token);
+        _context.AddRange(compliments);
+        await _context.SaveChangesAsync(token);
+
         _logger.LogInformation("Batch compliments create is complete");
         return compliments.Select(x => x.Id).ToList();
     }
@@ -56,14 +61,50 @@ public class ComplimentHandler : IComplimentHandler
     /// <inheritdoc/>
     public async Task<List<ComplimentDto>> GetAllCompliments(CancellationToken token)
     {
-        var compliments = await _service.GetAllCompliments(token);
+        var compliments = await _context.Set<Compliment>()
+            .AsNoTracking()
+            .ToListAsync(token);
 
         return _mapper.Map<List<ComplimentDto>>(compliments);
     }
 
+    /// <inheritdoc/>
     public async Task<ComplimentDto?> GetComplimentById(Guid complimentId, CancellationToken token)
     {
-        var compliment = await _service.GetComplimentById(complimentId, token);
+        var compliment = await _context.Set<Compliment>()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == complimentId, token);
+
         return _mapper.Map<ComplimentDto?>(compliment);
+    }
+
+    /// <inheritdoc/>
+    public async Task UpdateComplimentById(Guid complimentId, ComplimentUpdateDto complimentUpdateDto,
+        CancellationToken token)
+    {
+        var compliment = await _context.Set<Compliment>()
+            .FirstOrDefaultAsync(x => x.Id == complimentId, token);
+
+        _mapper.Map(complimentUpdateDto, compliment);
+
+        _logger.LogInformation("Compliment updated {complimentId}", complimentId);
+
+
+        await _context.SaveChangesAsync(token);
+    }
+
+    /// <inheritdoc/>
+    public async Task DeleteComplimentById(Guid complimentId, CancellationToken token)
+    {
+        var compliment = await _context.Set<Compliment>()
+            .FirstOrDefaultAsync(x => x.Id == complimentId, token);
+
+        if (compliment == null)
+        {
+            throw new CommonErrorException($"Compliment with id {complimentId} not found");
+        }
+        _context.Remove(compliment);
+        _logger.LogInformation("Compliment deleted {complimentId}", complimentId);
+        await _context.SaveChangesAsync(token);
     }
 }

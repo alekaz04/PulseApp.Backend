@@ -19,5 +19,7 @@ public class PulseAppProfile : Profile
             .ForMember(x => x.CreatedAt, e => e.MapFrom(x => DateTimeOffset.UtcNow))
             .ForMember(x => x.UpdatedAt, e => e.MapFrom(x => DateTimeOffset.UtcNow));
 
+        CreateMap<ComplimentUpdateDto, Compliment>()
+            .ForMember(x => x.UpdatedAt, e => e.MapFrom(x => DateTimeOffset.UtcNow));
     }
 }

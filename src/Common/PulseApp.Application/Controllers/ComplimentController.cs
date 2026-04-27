@@ -67,4 +67,27 @@ public class ComplimentController : ControllerBase
         var result = await _handler.GetAllCompliments(token);
         return Ok(result);
     }
+
+    /// <summary>
+    /// Обновить комплимент по идентификатору
+    /// </summary>
+    [HttpPut("{complimentId:guid}")]
+    [ApiKey]
+    public async Task<IActionResult> UpdateCompliment([FromRoute] Guid complimentId, [FromBody] ComplimentUpdateDto complimentUpdateDto, CancellationToken token)
+    {
+        await _handler.UpdateComplimentById(complimentId, complimentUpdateDto, token);
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Удалить комплимент по идентификатору
+    /// </summary>
+    [HttpDelete("{complimentId:guid}")]
+    [ApiKey]
+    public async Task<IActionResult> DeleteCompliment([FromRoute] Guid complimentId, CancellationToken token)
+    {
+        await _handler.DeleteComplimentById(complimentId, token);
+        return NoContent();
+    }
 }

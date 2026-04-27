@@ -18,21 +18,6 @@ public class ComplimentService : IComplimentService
     }
 
     /// <inheritdoc/>
-    public Task CreateCompliment(Compliment newCompliment, CancellationToken token)
-    {
-        _context.Add(newCompliment);
-        return _context.SaveChangesAsync(token);
-    }
-
-    /// <inheritdoc/>
-    public Task CreateBatchCompliment(List<Compliment> compliments, CancellationToken token)
-    {
-        _context.AddRange(compliments);
-        return _context.SaveChangesAsync(token);
-    }
-
-
-    /// <inheritdoc/>
     public async Task<Compliment> GetRandomCompliment(CancellationToken token)
     {
         var compliment = await _context.Set<Compliment>()
@@ -50,20 +35,5 @@ public class ComplimentService : IComplimentService
 
         await _context.SaveChangesAsync(token);
         return compliment;
-    }
-
-    /// <inheritdoc/>
-    public async Task<List<Compliment>> GetAllCompliments(CancellationToken token)
-    {
-        return await _context.Set<Compliment>()
-            .AsNoTracking()
-            .ToListAsync(token);
-    }
-
-    public async Task<Compliment?> GetComplimentById(Guid complimentId, CancellationToken token)
-    {
-        return await _context.Set<Compliment>()
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == complimentId, token);
     }
 }

@@ -21,5 +21,5 @@ public class HangfireOptions
     /// <summary>
     /// Url дашборда hangfire
     /// </summary>
-    public string Url {get;set;} = "/hangfire";
+    public string Url { get; set; } = "/hangfire";
 }

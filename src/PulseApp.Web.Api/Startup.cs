@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using PulseApp.Application;
 using PulseApp.Common.Extensions;
-using PulseApp.Domain.Options;
 using PulseApp.Extensions.DependencyInjection;
 using PulseApp.Infrastructure;
 using PulseApp.Logging.Extensions;
@@ -38,17 +37,13 @@ public class Startup
         services.AddControllers();
         services.AddCommon(Configuration)
             .AddPostgresLogging(Configuration)
-            .AddApplicationServices(Configuration);
+            .AddApplicationServices(Configuration)
+            .AddPulseOptions(Configuration)
+            .AddCustomHangfire(Configuration);
 
         services.AddDbContext<PulseDataContext>(x =>
             x.UseNpgsql(Configuration.GetConnectionString(nameof(PulseDataContext))));
 
-        services.Configure<VapidOptions>(Configuration.GetSection(nameof(VapidOptions)));
-        services.Configure<DatabaseOptions>(Configuration.GetSection(nameof(DatabaseOptions)));
-        services.Configure<ApiKeyOption>(Configuration.GetSection(nameof(ApiKeyOption)));
-        services.Configure<SchedulerOptions>(Configuration.GetSection(nameof(SchedulerOptions)));
-
-        services.AddCustomHangfire(Configuration);
         services.AddCors(options =>
         {
             options.AddPolicy(CorsPolicy, policy =>

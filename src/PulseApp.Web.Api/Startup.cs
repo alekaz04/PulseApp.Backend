@@ -44,6 +44,7 @@ public class Startup
         services.Configure<VapidOptions>(Configuration.GetSection(nameof(VapidOptions)));
         services.Configure<DatabaseOptions>(Configuration.GetSection(nameof(DatabaseOptions)));
         services.Configure<ApiKeyOption>(Configuration.GetSection(nameof(ApiKeyOption)));
+        services.Configure<SchedulerOptions>(Configuration.GetSection(nameof(SchedulerOptions)));
 
         services.AddCustomHangfire(Configuration);
         services.AddCors(options =>

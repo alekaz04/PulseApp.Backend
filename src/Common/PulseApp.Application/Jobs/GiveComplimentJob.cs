@@ -1,10 +1,12 @@
 ﻿using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using PulseApp.Application.DTOs;
 using PulseApp.Application.Interfaces;
 using PulseApp.Common;
 using PulseApp.Domain.Entities;
+using PulseApp.Domain.Options;
 using PulseApp.Hangfire;
 
 namespace PulseApp.Application.Jobs;
@@ -20,18 +22,22 @@ public class GiveComplimentJob : IHangfireRecurringJob
     /// <inheritdoc cref="ILogger{T}"/>
     private readonly ILogger<GiveComplimentJob> _logger;
 
+    /// <inheritdoc cref="IOptions{T}"/>
+    private readonly IOptions<SchedulerOptions> _options;
+
     /// <inheritdoc/>
-    /// <remarks>Крон каждый день с 8 до 22, в 26 минут</remarks>
-    public string CronExpression { get; } = "26 8-22 * * *";
+    public string CronExpression { get; }
 
     /// <inheritdoc/>
     public RecurringJobOptions? JobOptions { get; } = new();
 
 
-    public GiveComplimentJob(IServiceScopeFactory scopeFactory, ILogger<GiveComplimentJob> logger)
+    public GiveComplimentJob(IServiceScopeFactory scopeFactory, ILogger<GiveComplimentJob> logger, IOptions<SchedulerOptions> options)
     {
         _scopeFactory = scopeFactory;
         _logger = logger;
+        _options = options;
+        CronExpression = _options.Value.ComplimentCronExpression;
     }
 
     public async Task Execute(CancellationToken token)

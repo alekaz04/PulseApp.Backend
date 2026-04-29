@@ -12,7 +12,10 @@ namespace PulseApp.Application.Handlers;
 public class AdministrationHandler : IAdministrationHandler
 {
     /// <inheritdoc cref="ISubscriptionService"/>
-    private readonly ISubscriptionService _service;
+    private readonly ISubscriptionService _subscriptionService;
+
+    /// <inheritdoc cref="IComplimentService"/>
+    private readonly IComplimentService _complimentService;
 
     /// <inheritdoc cref="IPushNotificationService"/>
     private readonly IPushNotificationService _pushNotificationService;
@@ -20,9 +23,10 @@ public class AdministrationHandler : IAdministrationHandler
     /// <inheritdoc cref="ILogger{T}"/>
     private readonly ILogger<AdministrationHandler> _logger;
 
-    public AdministrationHandler(ISubscriptionService service, IPushNotificationService pushNotificationService, ILogger<AdministrationHandler> logger)
+    public AdministrationHandler(ISubscriptionService subscriptionService, IComplimentService complimentService, IPushNotificationService pushNotificationService, ILogger<AdministrationHandler> logger)
     {
-        _service = service;
+        _subscriptionService = subscriptionService;
+        _complimentService = complimentService;
         _pushNotificationService = pushNotificationService;
         _logger = logger;
     }
@@ -40,7 +44,7 @@ public class AdministrationHandler : IAdministrationHandler
             throw new CommonErrorException("Body is required");
         }
 
-        var subscriptions = await _service.GetActiveSubscriptions(token);
+        var subscriptions = await _subscriptionService.GetActiveSubscriptions(token);
         int totalSubscriptions = subscriptions.Count;
 
         if (totalSubscriptions == 0)
@@ -71,6 +75,11 @@ public class AdministrationHandler : IAdministrationHandler
     /// <inheritdoc/>
     public async Task<List<SubscriptionPush>> GetAllSubscriptions(CancellationToken token)
     {
-        return await _service.GetActiveSubscriptions(token);
+        return await _subscriptionService.GetActiveSubscriptions(token);
+    }
+
+    public async Task<int> ResetComplimentsPool(CancellationToken token)
+    {
+        return await _complimentService.ResetAllPushedCompliments(token);
     }
 }

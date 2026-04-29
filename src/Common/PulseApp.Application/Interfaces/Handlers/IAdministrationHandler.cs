@@ -21,4 +21,11 @@ public interface IAdministrationHandler
     /// <param name="token">Токен отмены запроса</param>
     /// <returns>Список активных подписок</returns>
     Task<List<SubscriptionPush>> GetAllSubscriptions(CancellationToken token);
+
+    /// <summary>
+    /// Обнулить статус комплиментов IsBeenPushed
+    /// </summary>
+    /// <param name="token">Токен отмены запроса</param>
+    /// <returns>Количество обновлённых комплиментов</returns>
+    Task<int> ResetComplimentsPool(CancellationToken token);
 }

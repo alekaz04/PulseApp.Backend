@@ -14,4 +14,11 @@ public interface IComplimentService
     /// <returns>Комплимент</returns>
     /// <remarks>Полученный комплимент меняет свойство IsBeenPush на true</remarks>
     public Task<Compliment> GetRandomCompliment(CancellationToken token);
+
+    /// <summary>
+    /// Восстановить все отправленные комплименты
+    /// </summary>
+    /// <param name="token">Токен отмены запроса</param>
+    /// <returns>Количество обновлённых комплиментов</returns>
+    Task<int> ResetAllPushedCompliments(CancellationToken token);
 }

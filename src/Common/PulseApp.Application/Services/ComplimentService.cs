@@ -36,4 +36,11 @@ public class ComplimentService : IComplimentService
         await _context.SaveChangesAsync(token);
         return compliment;
     }
+
+    /// <inheritdoc/>
+    public async Task<int> ResetAllPushedCompliments(CancellationToken token)
+    {
+        return await _context.Set<Compliment>().Where(x => x.IsBeenPushed)
+            .ExecuteUpdateAsync(x => x.SetProperty(p => p.IsBeenPushed, false), token);
+    }
 }

@@ -32,10 +32,23 @@ public class AdministrationController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Получить список активных подписок
+    /// </summary>
     [HttpGet("all")]
     public async Task<ActionResult> GetAllSubscriptions(CancellationToken token)
     {
         var result = await _handler.GetAllSubscriptions(token);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Восстановить пул комплиментов
+    /// </summary>
+    [HttpPost("compliments/reset-pool")]
+    public async Task<ActionResult> ResetComplimentPool(CancellationToken token)
+    {
+        int result = await _handler.ResetComplimentsPool(token);
         return Ok(result);
     }
 }

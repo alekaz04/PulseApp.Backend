@@ -2,6 +2,7 @@
 using PulseApp.Application.DTOs;
 using PulseApp.Application.Interfaces;
 using PulseApp.Common;
+using PulseApp.Domain.Entities;
 
 namespace PulseApp.Application.Handlers;
 
@@ -26,11 +27,7 @@ public class AdministrationHandler : IAdministrationHandler
         _logger = logger;
     }
 
-    /// <summary>
-    /// Отправить пуш уведомление всем пользователям
-    /// </summary>
-    /// <param name="request">Запрос на отправку уведомления</param>
-    /// <param name="token">Токен отмены запроса</param>
+    /// <inheritdoc/>
     public async Task<SendNotificationResponse> SendToAll(SendNotificationRequest request, CancellationToken token)
     {
         if (string.IsNullOrWhiteSpace(request.Title))
@@ -69,5 +66,11 @@ public class AdministrationHandler : IAdministrationHandler
         );
 
         return new SendNotificationResponse(totalSubscriptions, $"Notification sent to {totalSubscriptions} subscriber(s)");
+    }
+
+    /// <inheritdoc/>
+    public async Task<List<SubscriptionPush>> GetAllSubscriptions(CancellationToken token)
+    {
+        return await _service.GetActiveSubscriptions(token);
     }
 }

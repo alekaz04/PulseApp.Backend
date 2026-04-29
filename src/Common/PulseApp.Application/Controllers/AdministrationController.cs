@@ -25,9 +25,18 @@ public class AdministrationController : ControllerBase
     /// Отправить push-уведомление всем подписчикам
     /// </summary>
     [HttpPost("push/all")]
-    public async Task<ActionResult<SendNotificationResponse>> SendToAll([FromBody] SendNotificationRequest request, CancellationToken token)
+    public async Task<ActionResult> SendToAll([FromBody] SendNotificationRequest request, CancellationToken token)
     {
-        return await _handler.SendToAll(request, token);
+        var result = await _handler.SendToAll(request, token);
+
+        return Ok(result);
+    }
+
+    [HttpGet("all")]
+    public async Task<ActionResult> GetAllSubscriptions(CancellationToken token)
+    {
+        var result = await _handler.GetAllSubscriptions(token);
+        return Ok(result);
     }
 }
 

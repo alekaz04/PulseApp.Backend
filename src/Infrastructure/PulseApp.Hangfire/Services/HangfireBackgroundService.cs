@@ -27,7 +27,7 @@ public class HangfireBackgroundService : BackgroundService
         try
         {
             CleanJobs();
-            RegisterRecursiveJob();
+            RegisterRecurringJobs();
         }
         catch (OperationCanceledException)
         {
@@ -57,7 +57,7 @@ public class HangfireBackgroundService : BackgroundService
     /// <summary>
     /// Регистрирует повторяющиеся задачи
     /// </summary>
-    private void RegisterRecursiveJob()
+    private void RegisterRecurringJobs()
     {
         foreach (var job in _jobs)
         {

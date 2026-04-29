@@ -21,7 +21,6 @@ public class PushNotificationService : IPushNotificationService
     /// <inheritdoc cref="ISubscriptionService"/>
     private readonly ISubscriptionService _subscriptionService;
 
-
     /// <inheritdoc cref="ILogger{T}"/>
     private readonly ILogger<PushNotificationService> _logger;
 

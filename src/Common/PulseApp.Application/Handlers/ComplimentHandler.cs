@@ -88,6 +88,11 @@ public class ComplimentHandler : IComplimentHandler
             .Where(x => !x.IsDeleted && x.Id == complimentId)
             .FirstOrDefaultAsync(token);
 
+        if (compliment == null)
+        {
+            throw new CommonErrorException($"Compliment with id {complimentId} not found");
+        }
+
         _mapper.Map(complimentUpdateDto, compliment);
 
         _logger.LogInformation("Compliment updated {complimentId}", complimentId);
@@ -106,6 +111,7 @@ public class ComplimentHandler : IComplimentHandler
         {
             throw new CommonErrorException($"Compliment with id {complimentId} not found");
         }
+
         compliment.IsDeleted = true;
         _logger.LogInformation("Compliment deleted {complimentId}", complimentId);
         await _context.SaveChangesAsync(token);

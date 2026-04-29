@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PulseApp.Application.DTOs;
 using PulseApp.Application.Interfaces;
+using PulseApp.Common;
+using PulseApp.Domain.Entities;
 using PulseApp.Hangfire;
 
 namespace PulseApp.Application.Jobs;
@@ -12,8 +14,8 @@ namespace PulseApp.Application.Jobs;
 /// </summary>
 public class GiveComplimentJob : IHangfireRecurringJob
 {
-    /// <inheritdoc cref="IServiceProvider"/>
-    private readonly IServiceProvider _serviceProvider;
+    /// <inheritdoc cref="IServiceScopeFactory"/>
+    private readonly IServiceScopeFactory _scopeFactory;
 
     /// <inheritdoc cref="ILogger{T}"/>
     private readonly ILogger<GiveComplimentJob> _logger;
@@ -26,9 +28,9 @@ public class GiveComplimentJob : IHangfireRecurringJob
     public RecurringJobOptions? JobOptions { get; } = new();
 
 
-    public GiveComplimentJob(IServiceProvider serviceProvider, ILogger<GiveComplimentJob> logger)
+    public GiveComplimentJob(IServiceScopeFactory scopeFactory, ILogger<GiveComplimentJob> logger)
     {
-        _serviceProvider = serviceProvider;
+        _scopeFactory = scopeFactory;
         _logger = logger;
     }
 
@@ -36,13 +38,24 @@ public class GiveComplimentJob : IHangfireRecurringJob
     {
         _logger.LogInformation("Start GiveComplimentJob");
 
-        var complimentService = _serviceProvider.GetRequiredService<IComplimentService>();
+        using var scope = _scopeFactory.CreateScope();
 
-        var compliment = await complimentService.GetRandomCompliment(token);
+        var complimentService = scope.ServiceProvider.GetRequiredService<IComplimentService>();
+
+        Compliment? compliment;
+        try
+        {
+            compliment = await complimentService.GetRandomCompliment(token);
+        }
+        catch (CommonErrorException ex)
+        {
+            _logger.LogWarning("Compliment pool is empty, skipping: {Message}", ex.Message);
+            return;
+        }
 
         var complimentPayload = new PushNotificationPayload(compliment.Title, compliment.Text);
 
-        var pushNotificationService = _serviceProvider.GetRequiredService<IPushNotificationService>();
+        var pushNotificationService = scope.ServiceProvider.GetRequiredService<IPushNotificationService>();
 
         await pushNotificationService.SendNotificationToAllSubscribes(complimentPayload, token);
 

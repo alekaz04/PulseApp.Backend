@@ -55,8 +55,8 @@ public class AdministrationHandler : IAdministrationHandler
         var payload = new PushNotificationPayload(
             Title: request.Title,
             Body: request.Body,
-            Icon: request.Icon ?? "/icons/icon-192x192.png",
-            Badge: request.Badge ?? "/icons/badge-72x72.png"
+            Icon: request.Icon ?? "/favicon/web-app-manifest-192x192.png",
+            Badge: request.Badge ?? "/favicon/favicon-96x96.png"
         );
 
         // Отправляем всем подписчикам

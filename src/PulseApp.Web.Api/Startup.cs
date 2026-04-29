@@ -51,7 +51,6 @@ public class Startup
             options.AddPolicy(CorsPolicy, policy =>
             {
                 policy.WithOrigins(Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? [""])
-                    .SetIsOriginAllowed(origin => origin.StartsWith("http://localhost") || origin.StartsWith("http://127.0.0.1"))
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             });

@@ -74,7 +74,6 @@ public class SubscriptionService : ISubscriptionService
         if (subscription is not null)
         {
             subscription.IsActive = false;
-            _context.Set<SubscriptionPush>().Update(subscription);
             await _context.SaveChangesAsync(token);
         }
     }
@@ -91,7 +90,6 @@ public class SubscriptionService : ISubscriptionService
         }
 
         subscription.IsActive = false;
-        _context.Set<SubscriptionPush>().Update(subscription);
         await _context.SaveChangesAsync(token);
 
         return true;

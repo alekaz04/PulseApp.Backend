@@ -1,5 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using PulseApp.Infrastructure;
 
 namespace PulseApp.Common.Extensions;
 
@@ -16,6 +18,12 @@ public static class CommonServiceCollectionExtensions
         public IServiceCollection AddCommon(IConfiguration configuration)
         {
             services.AddSwagger();
+            services.AddHealthChecks()
+                .AddCheck(
+                    name: "liveness",
+                    check: () => HealthCheckResult.Healthy(),
+                    tags: new string[] { "liveness" })
+                .AddDbContextCheck<PulseDataContext>();
 
             return services;
         }

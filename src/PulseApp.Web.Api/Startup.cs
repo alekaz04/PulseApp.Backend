@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
 using PulseApp.Application;
 using PulseApp.Common.Extensions;
 using PulseApp.Domain.Options;
@@ -66,20 +68,19 @@ public class Startup
     public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         app.UseSwagger();
-
         app.UseErrorMiddleware();
-
         app.UseApiProtection();
-
         app.UseCors(CorsPolicy);
-
         app.UseRouting();
-
         app.UseCustomHangfire();
 
         app.UseEndpoints(x =>
         {
             x.MapControllers();
+            x.MapHealthChecks("/health", new HealthCheckOptions()
+            {
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
         });
     }
 }

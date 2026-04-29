@@ -63,6 +63,7 @@ public class ComplimentHandler : IComplimentHandler
     {
         var compliments = await _context.Set<Compliment>()
             .AsNoTracking()
+            .Where(x => !x.IsDeleted)
             .ToListAsync(token);
 
         return _mapper.Map<List<ComplimentDto>>(compliments);
@@ -73,7 +74,8 @@ public class ComplimentHandler : IComplimentHandler
     {
         var compliment = await _context.Set<Compliment>()
             .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == complimentId, token);
+            .Where(x => !x.IsDeleted && x.Id == complimentId)
+            .FirstOrDefaultAsync(token);
 
         return _mapper.Map<ComplimentDto?>(compliment);
     }
@@ -83,12 +85,12 @@ public class ComplimentHandler : IComplimentHandler
         CancellationToken token)
     {
         var compliment = await _context.Set<Compliment>()
-            .FirstOrDefaultAsync(x => x.Id == complimentId, token);
+            .Where(x => !x.IsDeleted && x.Id == complimentId)
+            .FirstOrDefaultAsync(token);
 
         _mapper.Map(complimentUpdateDto, compliment);
 
         _logger.LogInformation("Compliment updated {complimentId}", complimentId);
-
 
         await _context.SaveChangesAsync(token);
     }
@@ -97,13 +99,14 @@ public class ComplimentHandler : IComplimentHandler
     public async Task DeleteComplimentById(Guid complimentId, CancellationToken token)
     {
         var compliment = await _context.Set<Compliment>()
-            .FirstOrDefaultAsync(x => x.Id == complimentId, token);
+            .Where(x => !x.IsDeleted && x.Id == complimentId)
+            .FirstOrDefaultAsync(token);
 
         if (compliment == null)
         {
             throw new CommonErrorException($"Compliment with id {complimentId} not found");
         }
-        _context.Remove(compliment);
+        compliment.IsDeleted = true;
         _logger.LogInformation("Compliment deleted {complimentId}", complimentId);
         await _context.SaveChangesAsync(token);
     }

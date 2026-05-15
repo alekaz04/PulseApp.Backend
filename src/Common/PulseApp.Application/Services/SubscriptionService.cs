@@ -32,7 +32,6 @@ public class SubscriptionService : ISubscriptionService
             existing.IsActive = true;
             existing.UserAgent = userAgent;
 
-            _context.Set<SubscriptionPush>().Update(existing);
             await _context.SaveChangesAsync(token);
 
             return existing.Id;
@@ -68,14 +67,9 @@ public class SubscriptionService : ISubscriptionService
     /// <inheritdoc/>
     public async Task DeactivateSubscription(Guid id, CancellationToken token)
     {
-        var subscription = await _context.Set<SubscriptionPush>()
-            .FirstOrDefaultAsync(x => x.Id == id, token);
-
-        if (subscription is not null)
-        {
-            subscription.IsActive = false;
-            await _context.SaveChangesAsync(token);
-        }
+        await _context.Set<SubscriptionPush>()
+            .Where(x => x.Id == id)
+            .ExecuteUpdateAsync(s => s.SetProperty(x => x.IsActive, false), token);
     }
 
     /// <inheritdoc/>

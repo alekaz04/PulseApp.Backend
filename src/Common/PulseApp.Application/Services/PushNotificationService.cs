@@ -32,7 +32,7 @@ public class PushNotificationService : IPushNotificationService
     }
 
     /// <inheritdoc/>
-    public async Task SendNotificationToSubscriber(SubscriptionPush subscription, PushNotificationPayload payload, CancellationToken token)
+    public async Task SendNotificationToSubscriber(SubscriptionPush subscription, WebPushClient webPushClient, PushNotificationPayload payload, CancellationToken token)
     {
         try
         {
@@ -49,8 +49,6 @@ public class PushNotificationService : IPushNotificationService
                 p256dh: subscription.P256dh,
                 auth: subscription.Auth
             );
-
-            var webPushClient = new WebPushClient();
 
             object jsonPayload = new
             {
@@ -94,7 +92,9 @@ public class PushNotificationService : IPushNotificationService
             return;
         }
         _logger.LogInformation("Sending push notification to {Count} subscriptions", subscriptions.Count);
-        var tasks = subscriptions.Select(sub => SendNotificationToSubscriber(sub, payload, token))
+        using var webPushClient = new WebPushClient();
+
+        var tasks = subscriptions.Select(sub => SendNotificationToSubscriber(sub, webPushClient, payload, token))
             .ToList();
 
         await Task.WhenAll(tasks);
@@ -105,7 +105,9 @@ public class PushNotificationService : IPushNotificationService
     /// <inheritdoc/>
     public async Task SendNotificationToSubscribers(List<SubscriptionPush> subscriptions, PushNotificationPayload payload, CancellationToken token)
     {
-        var tasks = subscriptions.Select(sub => SendNotificationToSubscriber(sub, payload, token)).ToList();
+        using var webPushClient = new WebPushClient();
+
+        var tasks = subscriptions.Select(sub => SendNotificationToSubscriber(sub, webPushClient, payload, token)).ToList();
 
         await Task.WhenAll(tasks);
 

@@ -1,5 +1,6 @@
 using PulseApp.Application.DTOs;
 using PulseApp.Domain.Entities;
+using WebPush;
 
 namespace PulseApp.Application.Interfaces;
 
@@ -11,7 +12,8 @@ public interface IPushNotificationService
     /// <summary>
     /// Отправить push-уведомление одному подписчику
     /// </summary>
-    Task SendNotificationToSubscriber(SubscriptionPush subscription, PushNotificationPayload payload, CancellationToken token);
+    Task SendNotificationToSubscriber(SubscriptionPush subscription, WebPushClient webPushClient,
+        PushNotificationPayload payload, CancellationToken token);
 
     /// <summary>
     /// Отправить push-уведомление всем подписчикам

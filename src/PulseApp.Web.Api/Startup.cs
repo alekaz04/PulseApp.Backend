@@ -62,7 +62,11 @@ public class Startup
     /// <param name="env"><inheritdoc cref="IWebHostEnvironment"/></param>
     public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        app.UseSwagger();
+        if (env.IsDevelopment())
+        {
+            app.UseSwagger();
+        }
+
         app.UseErrorMiddleware();
         app.UseApiProtection();
         app.UseCors(CorsPolicy);

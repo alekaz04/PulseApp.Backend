@@ -17,6 +17,10 @@ public static class OptionsServiceCollectionExtensions
             .Configure<ApiKeyOption>(configuration.GetSection(nameof(ApiKeyOption)))
             .Configure<SchedulerOptions>(configuration.GetSection(nameof(SchedulerOptions)));
 
+        services.AddOptions<VapidOptions>()
+            .Bind(configuration.GetSection(nameof(VapidOptions)))
+            .ValidateDataAnnotations();
+
         return services;
     }
 }

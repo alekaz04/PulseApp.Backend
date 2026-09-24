@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using PulseApp.Application.DTOs;
 using PulseApp.Application.Interfaces;
+using PulseApp.Authentication.Abstraction;
 using PulseApp.Common;
 
 namespace PulseApp.Application.Handlers;
@@ -13,12 +14,15 @@ public class SubscriptionHandler : ISubscriptionHandler
     /// <inheritdoc cref="ISubscriptionService"/>
     private readonly ISubscriptionService _service;
 
+    private readonly ICurrentUserService _currentUserService;
+
     /// <inheritdoc cref="ILogger{T}"/>
     private readonly ILogger<SubscriptionHandler> _logger;
 
-    public SubscriptionHandler(ISubscriptionService service, ILogger<SubscriptionHandler> logger)
+    public SubscriptionHandler(ISubscriptionService service,ICurrentUserService currentUserService ,ILogger<SubscriptionHandler> logger)
     {
         _service = service;
+        _currentUserService = currentUserService;
         _logger = logger;
     }
 
@@ -35,6 +39,7 @@ public class SubscriptionHandler : ISubscriptionHandler
             request.Keys.P256dh,
             request.Keys.Auth,
             request.UserAgent,
+            request.InviteCode,
             token);
 
         _logger.LogInformation("New push subscription created: {SubscriptionId}", subscriptionId);
@@ -60,5 +65,13 @@ public class SubscriptionHandler : ISubscriptionHandler
 
         _logger.LogInformation("Subscription deactivated for endpoint: {Endpoint}", endpoint);
         return new UnsubscribeResponse(true, "Successfully unsubscribed");
+    }
+
+    public async Task<string> CreateSubscriptionCode(CancellationToken token)
+    {
+        var currentUserId = _currentUserService.CurrentUser?.Id ??
+                            throw new CommonErrorException("Пользователь запрашиваюший создание ссылки не найден");
+
+        return await _service.CreateSubscriptionCode(currentUserId, token);
     }
 }

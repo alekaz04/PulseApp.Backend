@@ -10,5 +10,5 @@ namespace PulseApp.Authentication.Services;
 public class CurrentUserService : ICurrentUserService
 {
     /// <inheritdoc/>
-    public User? CurrentUser { get; internal set; }
+    public User? CurrentUser { get;  set; }
 }

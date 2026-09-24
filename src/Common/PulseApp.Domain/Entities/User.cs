@@ -32,4 +32,6 @@ public class User
     /// Время создания пользователя
     /// </summary>
     public DateTimeOffset CreatedAt { get; set; }
+
+    public List<SubscriptionPush> Subscriptions { get; set; }
 }

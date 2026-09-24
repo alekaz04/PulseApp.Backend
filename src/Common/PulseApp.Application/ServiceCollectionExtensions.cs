@@ -29,6 +29,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IComplimentHandler, ComplimentHandler>();
 
         services.AddHangfireJob<GiveComplimentJob>();
+        services.AddTransient<CurrentUserIdResolver>();
         services.AddAutoMapper(config =>
         {
             config.AddProfile<PulseAppProfile>();

@@ -42,4 +42,14 @@ public class SubscriptionPush
     /// Флаг активности подписки
     /// </summary>
     public bool IsActive { get; set; } = true;
+
+    /// <summary>
+    /// Идентификатор пользователя хозяина
+    /// </summary>
+    public Guid UserOwnerId { get; set; }
+
+    /// <summary>
+    /// Пользователь хозяин
+    /// </summary>
+    public User UserOwner { get; set; } = null!;
 }

@@ -39,4 +39,11 @@ public class Compliment
     /// Дата обновления
     /// </summary>
     public DateTimeOffset UpdatedAt { get; set; }
+
+    /// <summary>
+    /// Пользователь создавший комплимент
+    /// </summary>
+    public Guid CreatedByUserId { get; set; }
+
+    public User CreatedByUser { get; set; }
 }

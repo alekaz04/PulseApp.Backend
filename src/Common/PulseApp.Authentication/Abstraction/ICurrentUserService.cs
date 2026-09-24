@@ -13,5 +13,5 @@ public interface ICurrentUserService
     /// <summary>
     /// Текущий пользователь. null для анонимных запросов
     /// </summary>
-    User? CurrentUser { get; }
+    User? CurrentUser { get; set; }
 }

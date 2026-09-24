@@ -13,7 +13,7 @@ public interface ISubscriptionService
     /// <summary>
     /// Создать новую подписку
     /// </summary>
-    Task<Guid> CreateOrUpdateSubscription(string endpoint, string p256dh, string auth, string? userAgent, CancellationToken token);
+    Task<Guid> CreateOrUpdateSubscription(string endpoint, string p256dh, string auth, string? userAgent,string inviteCode, CancellationToken token);
 
     /// <summary>
     /// Получить все активные подписки
@@ -29,4 +29,6 @@ public interface ISubscriptionService
     /// Деактивировать подписку по endpoint
     /// </summary>
     Task<bool> DeactivateSubscriptionByEndpoint(string endpoint, CancellationToken token);
+
+    Task<string> CreateSubscriptionCode(Guid createUserId, CancellationToken token);
 }

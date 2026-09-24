@@ -7,11 +7,11 @@ using PulseApp.Authentication;
 namespace PulseApp.Application.Controllers;
 
 /// <summary>
-/// Контроллер для администратора системы
+/// Контроллер для создания комлиментов для пользователя
 /// </summary>
 [ApiController]
 [Route("api/compliment")]
-[Authorize(Policy = AuthorizationPolicies.Admin)]
+[Authorize]
 public class ComplimentController : ControllerBase
 {
     /// <inheritdoc cref="IComplimentHandler"/>

@@ -20,7 +20,7 @@ public class CurrentUserMiddleware
         _next = next;
     }
 
-    public async Task InvokeAsync(HttpContext context, CurrentUserService currentUser, IUserService userService)
+    public async Task InvokeAsync(HttpContext context, ICurrentUserService currentUser, IUserService userService)
     {
         // Пропускаем анонимные запросы (например, /swagger) — middleware не должен их ломать
         if (context.User.Identity?.IsAuthenticated == true)

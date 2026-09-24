@@ -33,5 +33,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(x => x.CreatedAt)
             .IsRequired();
+
+        builder.HasMany(x => x.Subscriptions)
+            .WithOne(x => x.UserOwner);
     }
 }

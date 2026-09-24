@@ -17,7 +17,8 @@ public class PulseAppProfile : Profile
         CreateMap<CreateComplimentDto, Compliment>()
             .ForMember(x => x.Id, e => e.MapFrom(x => Guid.NewGuid()))
             .ForMember(x => x.CreatedAt, e => e.MapFrom(x => DateTimeOffset.UtcNow))
-            .ForMember(x => x.UpdatedAt, e => e.MapFrom(x => DateTimeOffset.UtcNow));
+            .ForMember(x => x.UpdatedAt, e => e.MapFrom(x => DateTimeOffset.UtcNow))
+            .ForMember(x => x.CreatedByUserId, e => e.MapFrom<CurrentUserIdResolver>());
 
         CreateMap<ComplimentUpdateDto, Compliment>()
             .ForMember(x => x.UpdatedAt, e => e.MapFrom(x => DateTimeOffset.UtcNow));

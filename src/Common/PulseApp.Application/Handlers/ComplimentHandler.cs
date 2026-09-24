@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PulseApp.Application.DTOs;
 using PulseApp.Application.Interfaces;
+using PulseApp.Authentication.Abstraction;
 using PulseApp.Common;
 using PulseApp.Domain.Entities;
 using PulseApp.Infrastructure;
@@ -21,11 +22,14 @@ public class ComplimentHandler : IComplimentHandler
     /// <inheritdoc cref="IMapper"/>
     private readonly IMapper _mapper;
 
-    public ComplimentHandler(PulseDataContext context, ILogger<ComplimentHandler> logger, IMapper mapper)
+    private readonly ICurrentUserService _currentUser;
+
+    public ComplimentHandler(PulseDataContext context, ILogger<ComplimentHandler> logger, IMapper mapper, ICurrentUserService currentUser)
     {
         _context = context;
         _logger = logger;
         _mapper = mapper;
+        _currentUser = currentUser;
     }
 
     /// <inheritdoc/>
@@ -61,9 +65,11 @@ public class ComplimentHandler : IComplimentHandler
     /// <inheritdoc/>
     public async Task<List<ComplimentDto>> GetAllCompliments(CancellationToken token)
     {
+        var currentUser = _currentUser.CurrentUser?.Id ?? throw new CommonErrorException("User not found");
+
         var compliments = await _context.Set<Compliment>()
             .AsNoTracking()
-            .Where(x => !x.IsDeleted)
+            .Where(x => !x.IsDeleted && x.CreatedByUserId == currentUser)
             .ToListAsync(token);
 
         return _mapper.Map<List<ComplimentDto>>(compliments);
@@ -72,9 +78,11 @@ public class ComplimentHandler : IComplimentHandler
     /// <inheritdoc/>
     public async Task<ComplimentDto?> GetComplimentById(Guid complimentId, CancellationToken token)
     {
+        var currentUser = _currentUser.CurrentUser?.Id ?? throw new CommonErrorException("User not found");
+
         var compliment = await _context.Set<Compliment>()
             .AsNoTracking()
-            .Where(x => !x.IsDeleted && x.Id == complimentId)
+            .Where(x => !x.IsDeleted && x.Id == complimentId && x.CreatedByUserId == currentUser)
             .FirstOrDefaultAsync(token);
 
         return _mapper.Map<ComplimentDto?>(compliment);
@@ -84,8 +92,10 @@ public class ComplimentHandler : IComplimentHandler
     public async Task UpdateComplimentById(Guid complimentId, ComplimentUpdateDto complimentUpdateDto,
         CancellationToken token)
     {
+        var currentUser = _currentUser.CurrentUser?.Id ?? throw new CommonErrorException("User not found");
+
         var compliment = await _context.Set<Compliment>()
-            .Where(x => !x.IsDeleted && x.Id == complimentId)
+            .Where(x => !x.IsDeleted && x.Id == complimentId && x.CreatedByUserId == currentUser)
             .FirstOrDefaultAsync(token);
 
         if (compliment == null)
@@ -103,8 +113,10 @@ public class ComplimentHandler : IComplimentHandler
     /// <inheritdoc/>
     public async Task DeleteComplimentById(Guid complimentId, CancellationToken token)
     {
+        var currentUser = _currentUser.CurrentUser?.Id ?? throw new CommonErrorException("User not found");
+
         var compliment = await _context.Set<Compliment>()
-            .Where(x => !x.IsDeleted && x.Id == complimentId)
+            .Where(x => !x.IsDeleted && x.Id == complimentId && x.CreatedByUserId == currentUser)
             .FirstOrDefaultAsync(token);
 
         if (compliment == null)

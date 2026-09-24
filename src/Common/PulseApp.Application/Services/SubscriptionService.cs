@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PulseApp.Application.Interfaces;
+using PulseApp.Authentication.Abstraction;
+using PulseApp.Common;
 using PulseApp.Domain.Entities;
 using PulseApp.Infrastructure;
 
@@ -13,28 +15,28 @@ public class SubscriptionService : ISubscriptionService
     /// <inheritdoc cref="PulseDataContext"/>
     private readonly PulseDataContext _context;
 
-    public SubscriptionService(PulseDataContext context)
+    private readonly ICurrentUserService _currentUserService;
+
+
+    public SubscriptionService(PulseDataContext context, ICurrentUserService currentUserService)
     {
         _context = context;
+        _currentUserService = currentUserService;
     }
 
     /// <inheritdoc/>
-    public async Task<Guid> CreateOrUpdateSubscription(string endpoint, string p256dh, string auth, string? userAgent, CancellationToken token)
+    public async Task<Guid> CreateOrUpdateSubscription(string endpoint, string p256dh, string auth, string? userAgent, string inviteCode ,CancellationToken token)
     {
-        var existing = await _context.Set<SubscriptionPush>()
-            .FirstOrDefaultAsync(x => x.Endpoint == endpoint, token);
+        var codeUser = await GetCode(inviteCode, token);
 
-        if (existing is not null)
+        if (codeUser.IsUsed)
         {
-            // Если подписка существует, то обновляем её
-            existing.P256dh = p256dh;
-            existing.Auth = auth;
-            existing.IsActive = true;
-            existing.UserAgent = userAgent;
+            throw new CommonErrorException("Code is already used");
+        }
 
-            await _context.SaveChangesAsync(token);
-
-            return existing.Id;
+        if (codeUser.ExpireAt < DateTimeOffset.UtcNow)
+        {
+            throw new CommonErrorException("Expired at is invalid");
         }
 
         // Создаем новую подписку
@@ -46,10 +48,12 @@ public class SubscriptionService : ISubscriptionService
             Auth = auth,
             UserAgent = userAgent,
             CreatedAt = DateTimeOffset.UtcNow,
-            IsActive = true
+            IsActive = true,
+            UserOwnerId = codeUser.CreatedCodeUserId
         };
 
         _context.Set<SubscriptionPush>().Add(subscription);
+        codeUser.IsUsed = true;
         await _context.SaveChangesAsync(token);
 
         return subscription.Id;
@@ -87,5 +91,28 @@ public class SubscriptionService : ISubscriptionService
         await _context.SaveChangesAsync(token);
 
         return true;
+    }
+
+    public async Task<string> CreateSubscriptionCode(Guid createUserId, CancellationToken token)
+    {
+        var codeObj = new SubscriptionCode()
+        {
+            Id = Guid.NewGuid(),
+            Code = Guid.NewGuid().ToString(),
+            CreatedAt = DateTimeOffset.UtcNow,
+            ExpireAt = DateTimeOffset.UtcNow.AddHours(24),
+            IsUsed = false,
+            CreatedCodeUserId = createUserId,
+        };
+        await _context.AddAsync(codeObj, token);
+        await _context.SaveChangesAsync(token);
+
+        return codeObj.Code;
+    }
+
+    public async Task<SubscriptionCode> GetCode(string code, CancellationToken token)
+    {
+        return await _context.Set<SubscriptionCode>()
+            .FirstOrDefaultAsync(x => x.Code == code, token) ?? throw new CommonErrorException($"Код {code} не ю");
     }
 }

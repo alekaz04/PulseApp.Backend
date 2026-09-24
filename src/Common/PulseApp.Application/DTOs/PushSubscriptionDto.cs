@@ -6,7 +6,8 @@ namespace PulseApp.Application.DTOs;
 public record SubscribeRequest(
     string Endpoint,
     PushKeys Keys,
-    string? UserAgent
+    string? UserAgent,
+    string InviteCode
 );
 
 /// <summary>

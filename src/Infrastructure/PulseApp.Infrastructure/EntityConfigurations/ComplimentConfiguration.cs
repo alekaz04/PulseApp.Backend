@@ -42,5 +42,9 @@ public class ComplimentConfiguration : IEntityTypeConfiguration<Compliment>
             .IsRequired();
 
         builder.HasIndex(x => x.IsBeenPushed);
+
+        builder.HasOne(x => x.CreatedByUser)
+            .WithMany()
+            .HasForeignKey(x => x.CreatedByUserId).OnDelete(DeleteBehavior.Cascade);
     }
 }

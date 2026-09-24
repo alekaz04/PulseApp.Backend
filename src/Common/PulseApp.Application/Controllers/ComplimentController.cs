@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PulseApp.Application.DTOs;
 using PulseApp.Application.Interfaces;
 using PulseApp.Authentication;
@@ -10,7 +11,7 @@ namespace PulseApp.Application.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/compliment")]
-[ApiKey]
+[Authorize(Policy = AuthorizationPolicies.Admin)]
 public class ComplimentController : ControllerBase
 {
     /// <inheritdoc cref="IComplimentHandler"/>

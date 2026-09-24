@@ -10,6 +10,7 @@ namespace PulseApp.Authentication;
 /// <summary>
 /// Атрибут доступа только по ключу
 /// </summary>
+[Obsolete]
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
 public class ApiKeyAttribute : Attribute, IAuthorizationFilter
 {

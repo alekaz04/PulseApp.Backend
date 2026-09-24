@@ -21,6 +21,11 @@ public static class OptionsServiceCollectionExtensions
             .Bind(configuration.GetSection(nameof(VapidOptions)))
             .ValidateDataAnnotations();
 
+        services.AddOptions<KeycloakOptions>()
+            .Bind(configuration.GetSection(nameof(KeycloakOptions)))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
         return services;
     }
 }

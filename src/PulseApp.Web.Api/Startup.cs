@@ -39,7 +39,8 @@ public class Startup
             .AddPostgresLogging(Configuration)
             .AddApplicationServices(Configuration)
             .AddPulseOptions(Configuration)
-            .AddCustomHangfire(Configuration);
+            .AddCustomHangfire(Configuration)
+            .AddKeycloakAuthentication();
 
         services.AddDbContext<PulseDataContext>(x =>
             x.UseNpgsql(Configuration.GetConnectionString(nameof(PulseDataContext))));
@@ -68,10 +69,15 @@ public class Startup
         }
 
         app.UseErrorMiddleware();
-        app.UseApiProtection();
-        app.UseCors(CorsPolicy);
+
         app.UseRouting();
+        app.UseCors(CorsPolicy);
+
         app.UseCustomHangfire();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+        app.UseCurrentUser();
 
         app.UseEndpoints(x =>
         {

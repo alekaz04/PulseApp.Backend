@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using PulseApp.Domain.Options;
 
 namespace PulseApp.Common.Extensions;
 
@@ -14,12 +17,22 @@ public static class CommonApplicationBuilderExtensions
         /// </summary>
         public IApplicationBuilder UseSwagger()
         {
+            var keycloak = app.ApplicationServices.GetRequiredService<IOptions<KeycloakOptions>>().Value;
+
             app.UseOpenApi();
             app.UseSwaggerUi(options =>
             {
                 options.Path = "/swagger";
                 options.DocumentTitle = "PulseApp API";
+
+                options.OAuth2Client = new NSwag.AspNetCore.OAuth2ClientSettings
+                {
+                    ClientId = keycloak.SwaggerClientId,
+                    UsePkceWithAuthorizationCodeGrant = true,
+                    AdditionalQueryStringParameters = { { "scope", "openid profile" } }
+                };
             });
+
             return app;
         }
 

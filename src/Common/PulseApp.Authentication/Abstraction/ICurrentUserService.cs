@@ -1,7 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
-using PulseApp.Domain.Entities;
+﻿using PulseApp.Domain.Entities;
 
 namespace PulseApp.Authentication.Abstraction;
 
@@ -11,7 +8,14 @@ namespace PulseApp.Authentication.Abstraction;
 public interface ICurrentUserService
 {
     /// <summary>
-    /// Текущий пользователь. null для анонимных запросов
+    /// Получить идентфиикатор текущего пользователя
     /// </summary>
-    User? CurrentUser { get; set; }
+    /// <returns>Идентификатор</returns>
+    public Guid GetCurrentUserId();
+
+    /// <summary>
+    /// Установить пользователя
+    /// </summary>
+    /// <remarks>Использовать только в Middleware</remarks>
+    public User SetCurrentUser(User user);
 }

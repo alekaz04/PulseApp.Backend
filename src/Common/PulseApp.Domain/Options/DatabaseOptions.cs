@@ -11,5 +11,5 @@ public class DatabaseOptions
     /// <summary>
     /// Флаг выполнения миграций при запуске приложения
     /// </summary>
-    public bool Migrate { get; set; }
+    public bool IsMigrate { get; set; }
 }

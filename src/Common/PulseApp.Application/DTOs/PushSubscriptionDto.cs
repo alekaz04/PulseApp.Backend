@@ -45,24 +45,6 @@ public record PushNotificationPayload(
 );
 
 /// <summary>
-/// Запрос на отправку уведомления всем подписчикам
-/// </summary>
-public record SendNotificationRequest(
-    string Title,
-    string Body,
-    string? Icon = null,
-    string? Badge = null
-);
-
-/// <summary>
-/// Ответ на запрос отправки уведомления
-/// </summary>
-public record SendNotificationResponse(
-    int TotalSubscriptions,
-    string Message
-);
-
-/// <summary>
 /// Ответ на запрос отписки от push-уведомлений
 /// </summary>
 public record UnsubscribeResponse(

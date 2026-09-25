@@ -45,8 +45,7 @@ public class PushNotificationService : IPushNotificationService
     }
 
 
-    /// <inheritdoc/>
-    public async Task SendNotificationToSubscriber(SubscriptionPush subscription, WebPushClient webPushClient, PushNotificationPayload payload, CancellationToken token)
+    private async Task SendNotificationToSubscriber(SubscriptionPush subscription, WebPushClient webPushClient, PushNotificationPayload payload, CancellationToken token)
     {
         try
         {
@@ -91,40 +90,8 @@ public class PushNotificationService : IPushNotificationService
                 _logger.LogInformation("Deactivating subscription {SubscriptionId} due to {StatusCode}", subscription.Id, ex.StatusCode);
 
                 await _subscriptionService.DeactivateSubscription(subscription.Id, token);
+                throw;
             }
         }
-    }
-
-    /// <inheritdoc/>
-    public async Task SendNotificationToAllSubscribes(PushNotificationPayload payload, CancellationToken token)
-    {
-        var subscriptions = await _subscriptionService.GetActiveSubscriptions(token);
-
-        if (subscriptions.Count == 0)
-        {
-            _logger.LogWarning("No active subscriptions found. Skipping push notification.");
-            return;
-        }
-        _logger.LogInformation("Sending push notification to {Count} subscriptions", subscriptions.Count);
-        using var webPushClient = new WebPushClient();
-
-        var tasks = subscriptions.Select(sub => SendNotificationToSubscriber(sub, webPushClient, payload, token))
-            .ToList();
-
-        await Task.WhenAll(tasks);
-
-        _logger.LogInformation("Push notifications sent to {Count} subscriptions", subscriptions.Count);
-    }
-
-    /// <inheritdoc/>
-    public async Task SendNotificationToSubscribers(List<SubscriptionPush> subscriptions, PushNotificationPayload payload, CancellationToken token)
-    {
-        using var webPushClient = new WebPushClient();
-
-        var tasks = subscriptions.Select(sub => SendNotificationToSubscriber(sub, webPushClient, payload, token)).ToList();
-
-        await Task.WhenAll(tasks);
-
-        _logger.LogInformation("Push notifications sent to {Count} subscriptions", subscriptions.Count);
     }
 }

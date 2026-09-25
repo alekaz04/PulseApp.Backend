@@ -41,9 +41,12 @@ public class Compliment
     public DateTimeOffset UpdatedAt { get; set; }
 
     /// <summary>
-    /// Пользователь создавший комплимент
+    /// Идентификатор пользователя создавший комплимент
     /// </summary>
     public Guid CreatedByUserId { get; set; }
 
-    public User CreatedByUser { get; set; }
+    /// <summary>
+    /// Пользователь создавший комплимент
+    /// </summary>
+    public User? CreatedByUser { get; set; }
 }

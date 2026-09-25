@@ -1,7 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Npgsql;
@@ -12,7 +9,7 @@ using PulseApp.Infrastructure;
 namespace PulseApp.Authentication.Services;
 
 /// <inheritdoc/>
-public class UserService : IUserService
+public class UserService(PulseDataContext context, ILogger<UserService> logger) : IUserService
 {
     /// <summary>
     /// Имя пользователя, если в токене его нет
@@ -20,16 +17,10 @@ public class UserService : IUserService
     private const string DefaultDisplayName = "Без имени";
 
     /// <inheritdoc cref="PulseDataContext"/>
-    private readonly PulseDataContext _context;
+    private readonly PulseDataContext _context = context;
 
     /// <inheritdoc cref="ILogger{T}"/>
-    private readonly ILogger<UserService> _logger;
-
-    public UserService(PulseDataContext context, ILogger<UserService> logger)
-    {
-        _context = context;
-        _logger = logger;
-    }
+    private readonly ILogger<UserService> _logger = logger;
 
     /// <inheritdoc/>
     public async Task<User> GetOrCreateAsync(ClaimsPrincipal principal, CancellationToken token)
@@ -45,17 +36,19 @@ public class UserService : IUserService
             return await CreateAsync(keycloakId, email, displayName, token);
         }
 
-        if (user.Email != email || user.DisplayName != displayName)
+        if (user.Email == email && user.DisplayName == displayName)
         {
-            await _context.Set<User>()
-                .Where(u => u.Id == user.Id)
-                .ExecuteUpdateAsync(s => s
-                    .SetProperty(u => u.Email, email)
-                    .SetProperty(u => u.DisplayName, displayName), token);
-
-            user.Email = email;
-            user.DisplayName = displayName;
+            return user;
         }
+
+        await _context.Set<User>()
+            .Where(u => u.Id == user.Id)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(u => u.Email, email)
+                .SetProperty(u => u.DisplayName, displayName), token);
+
+        user.Email = email;
+        user.DisplayName = displayName;
 
         return user;
     }
@@ -93,7 +86,6 @@ public class UserService : IUserService
         }
         catch (DbUpdateException e) when (e.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation })
         {
-            // Пользователя уже создал параллельный запрос
             return await FindAsync(keycloakId, token)
                    ?? throw new InvalidOperationException($"User with subject '{keycloakId}' was not found after unique violation");
         }

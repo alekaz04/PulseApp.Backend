@@ -13,9 +13,7 @@ public static class OptionsServiceCollectionExtensions
     {
         services
             .Configure<VapidOptions>(configuration.GetSection(nameof(VapidOptions)))
-            .Configure<DatabaseOptions>(configuration.GetSection(nameof(DatabaseOptions)))
-            .Configure<ApiKeyOption>(configuration.GetSection(nameof(ApiKeyOption)))
-            .Configure<SchedulerOptions>(configuration.GetSection(nameof(SchedulerOptions)));
+            .Configure<DatabaseOptions>(configuration.GetSection(nameof(DatabaseOptions)));
 
         services.AddOptions<VapidOptions>()
             .Bind(configuration.GetSection(nameof(VapidOptions)))

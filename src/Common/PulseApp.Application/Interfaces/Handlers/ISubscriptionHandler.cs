@@ -34,12 +34,4 @@ public interface ISubscriptionHandler
     /// <param name="token">Токен отмены запроса</param>
     /// <returns>Коллекция подписок</returns>
     Task<List<SubscriptionDto>> GetAllSubscriptionForUser(CancellationToken token);
-
-    /// <summary>
-    /// Отправить комплимент конкретному подписчику
-    /// </summary>
-    /// <param name="subscriptionId">Идентификатор подписчика</param>
-    /// <param name="complimentId">Идентификатор комплимента</param>
-    /// <param name="token">Токен отмены запроса</param>
-    Task SendComplimentToUser(Guid subscriptionId, Guid complimentId, CancellationToken token);
 }

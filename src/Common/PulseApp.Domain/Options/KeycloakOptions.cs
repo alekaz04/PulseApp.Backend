@@ -53,12 +53,6 @@ public class KeycloakOptions
     public TimeSpan ClockSkew { get; set; } = TimeSpan.FromMinutes(1);
 
     /// <summary>
-    /// Роль администратора системы: роль realm'а или роль клиента <see cref="Audience"/>
-    /// </summary>
-    [Required]
-    public string AdminRole { get; set; } = "admin";
-
-    /// <summary>
     /// Публичный клиент Keycloak для авторизации из Swagger UI
     /// </summary>
     [Required]

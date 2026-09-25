@@ -119,7 +119,7 @@ public class SubscriptionService : ISubscriptionService
 
     public async Task<List<SubscriptionPush>> GetAllSubscriptionForUser(CancellationToken token)
     {
-        var currentUserId = _currentUserService.CurrentUser?.Id ?? throw new CommonErrorException("User not logged in");
+        var currentUserId = _currentUserService.GetCurrentUserId();
 
         var subscriptions = await _context.Set<SubscriptionPush>()
             .Where(x => x.UserOwnerId == currentUserId)
@@ -130,7 +130,8 @@ public class SubscriptionService : ISubscriptionService
 
     public async Task<SubscriptionPush> GetSubscriptionById(Guid subscriptionId, CancellationToken token)
     {
-        var currentUserId = _currentUserService.CurrentUser?.Id ?? throw new CommonErrorException("User not logged in");
+        var currentUserId = _currentUserService.GetCurrentUserId();
+
         var subscription = await _context.Set<SubscriptionPush>()
             .Where(x => x.Id == subscriptionId && x.UserOwnerId == currentUserId && x.IsActive)
             .FirstOrDefaultAsync(token);
@@ -138,7 +139,7 @@ public class SubscriptionService : ISubscriptionService
         return subscription ?? throw new CommonErrorException("Subscription not found or it is not active");
     }
 
-    public async Task<SubscriptionCode> GetCode(string code, CancellationToken token)
+    private async Task<SubscriptionCode> GetCode(string code, CancellationToken token)
     {
         return await _context.Set<SubscriptionCode>()
             .FirstOrDefaultAsync(x => x.Code == code, token) ?? throw new CommonErrorException($"Код {code} не ю");

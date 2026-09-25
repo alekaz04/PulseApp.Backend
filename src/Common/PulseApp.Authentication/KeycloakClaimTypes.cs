@@ -17,19 +17,4 @@ public static class KeycloakClaimTypes
     /// Почта пользователя
     /// </summary>
     public const string Email = "email";
-
-    /// <summary>
-    /// Роли realm'а: {"roles": [...]}
-    /// </summary>
-    public const string RealmAccess = "realm_access";
-
-    /// <summary>
-    /// Роли клиентов: {"client-id": {"roles": [...]}}
-    /// </summary>
-    public const string ResourceAccess = "resource_access";
-
-    /// <summary>
-    /// Плоский клейм роли, в который переносятся роли из <see cref="RealmAccess"/> и <see cref="ResourceAccess"/>
-    /// </summary>
-    public const string Role = "role";
 }

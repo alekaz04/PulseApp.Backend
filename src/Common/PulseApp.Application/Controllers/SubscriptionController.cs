@@ -1,7 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PulseApp.Application.Interfaces;
 
@@ -35,16 +32,5 @@ public class SubscriptionController : ControllerBase
     {
         var result = await _handler.GetAllSubscriptionForUser(token);
         return Ok(result);
-    }
-
-    /// <summary>
-    /// Отправить комплимент пользователю
-    /// </summary>
-    [HttpPost("push/to/{subscriptionId:guid}")]
-    public async Task<ActionResult> SendComplimentToUser([FromRoute] Guid subscriptionId, [FromQuery] Guid complimentId, CancellationToken token)
-    {
-        await _handler.SendComplimentToUser(subscriptionId, complimentId, token);
-
-        return Ok();
     }
 }

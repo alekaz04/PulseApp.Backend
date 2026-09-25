@@ -65,7 +65,7 @@ public class ComplimentHandler : IComplimentHandler
     /// <inheritdoc/>
     public async Task<List<ComplimentDto>> GetAllCompliments(CancellationToken token)
     {
-        var currentUser = _currentUser.CurrentUser?.Id ?? throw new CommonErrorException("User not found");
+        var currentUser = _currentUser.GetCurrentUserId();
 
         var compliments = await _context.Set<Compliment>()
             .AsNoTracking()
@@ -78,7 +78,7 @@ public class ComplimentHandler : IComplimentHandler
     /// <inheritdoc/>
     public async Task<ComplimentDto?> GetComplimentById(Guid complimentId, CancellationToken token)
     {
-        var currentUser = _currentUser.CurrentUser?.Id ?? throw new CommonErrorException("User not found");
+        var currentUser = _currentUser.GetCurrentUserId();
 
         var compliment = await _context.Set<Compliment>()
             .AsNoTracking()
@@ -92,7 +92,7 @@ public class ComplimentHandler : IComplimentHandler
     public async Task UpdateComplimentById(Guid complimentId, ComplimentUpdateDto complimentUpdateDto,
         CancellationToken token)
     {
-        var currentUser = _currentUser.CurrentUser?.Id ?? throw new CommonErrorException("User not found");
+        var currentUser = _currentUser.GetCurrentUserId();
 
         var compliment = await _context.Set<Compliment>()
             .Where(x => !x.IsDeleted && x.Id == complimentId && x.CreatedByUserId == currentUser)
@@ -113,7 +113,7 @@ public class ComplimentHandler : IComplimentHandler
     /// <inheritdoc/>
     public async Task DeleteComplimentById(Guid complimentId, CancellationToken token)
     {
-        var currentUser = _currentUser.CurrentUser?.Id ?? throw new CommonErrorException("User not found");
+        var currentUser = _currentUser.GetCurrentUserId();
 
         var compliment = await _context.Set<Compliment>()
             .Where(x => !x.IsDeleted && x.Id == complimentId && x.CreatedByUserId == currentUser)

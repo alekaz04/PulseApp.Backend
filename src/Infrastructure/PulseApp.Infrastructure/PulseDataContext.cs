@@ -14,7 +14,7 @@ public class PulseDataContext : DbContext
 {
     public PulseDataContext(DbContextOptions<PulseDataContext> options, IOptions<DatabaseOptions> dbConfiguration) : base(options)
     {
-        if (dbConfiguration.Value.Migrate)
+        if (dbConfiguration.Value.IsMigrate)
         {
             Database.Migrate();
         }

@@ -24,7 +24,8 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<IComplimentService, ComplimentService>();
 
-        services.AddScoped<IAdministrationHandler, AdministrationHandler>();
+        services.AddScoped<IPushComplimentService, PushComplimentService>();
+
         services.AddScoped<ISubscriptionHandler, SubscriptionHandler>();
         services.AddScoped<IComplimentHandler, ComplimentHandler>();
 

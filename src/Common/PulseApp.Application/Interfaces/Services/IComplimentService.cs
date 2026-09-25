@@ -16,12 +16,10 @@ public interface IComplimentService
     public Task<Compliment> GetRandomCompliment(CancellationToken token);
 
     /// <summary>
-    /// Восстановить все отправленные комплименты
+    /// Получить комплимент по идентификатору
     /// </summary>
+    /// <param name="complimentId">Идентификатор комплимента</param>
     /// <param name="token">Токен отмены запроса</param>
-    /// <returns>Количество обновлённых комплиментов</returns>
-    Task<int> ResetAllPushedCompliments(CancellationToken token);
-
+    /// <returns>Комплимент</returns>
     Task<Compliment> GetComplimentById(Guid complimentId, CancellationToken token);
-    Task SetComplimentAsPushed(Guid complimentId, CancellationToken token);
 }

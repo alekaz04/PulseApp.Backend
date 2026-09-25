@@ -31,11 +31,7 @@ public static class AuthServiceCollectionsExtensions
                 ConfigureJwtBearer(options, keycloakOptions.Value));
 
         services.AddAuthorization();
-        services.AddOptions<AuthorizationOptions>()
-            .Configure<IOptions<KeycloakOptions>>((options, keycloakOptions) =>
-                options.AddPolicy(AuthorizationPolicies.Admin, policy => policy
-                    .RequireAuthenticatedUser()
-                    .RequireRole(keycloakOptions.Value.AdminRole)));
+        services.AddOptions<AuthorizationOptions>();
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IUserService, UserService>();
@@ -70,7 +66,6 @@ public static class AuthServiceCollectionsExtensions
 
         var validation = options.TokenValidationParameters;
         validation.NameClaimType = keycloak.NameClaimType;
-        validation.RoleClaimType = KeycloakClaimTypes.Role;
         validation.ClockSkew = keycloak.ClockSkew;
 
         if (keycloak.ValidIssuers.Length > 0)
@@ -92,10 +87,8 @@ public static class AuthServiceCollectionsExtensions
                 if (!identity.HasClaim(c => c.Type == KeycloakClaimTypes.Subject))
                 {
                     context.Fail($"Token has no '{KeycloakClaimTypes.Subject}' claim");
-                    return Task.CompletedTask;
                 }
 
-                KeycloakRolesMapper.MapRoles(identity, keycloak.Audience);
                 return Task.CompletedTask;
             }
         };

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PulseApp.Application.DTOs;
 using PulseApp.Application.Interfaces;
-using PulseApp.Authentication;
 
 namespace PulseApp.Application.Controllers;
 

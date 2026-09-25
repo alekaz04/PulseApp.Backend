@@ -16,8 +16,6 @@ public class SubscriptionHandler : ISubscriptionHandler
     private readonly ISubscriptionService _service;
 
     private readonly ICurrentUserService _currentUserService;
-    private readonly IComplimentService _complimentService;
-    private readonly IPushNotificationService _pushNotificationService;
     private readonly IMapper _mapper;
 
     /// <inheritdoc cref="ILogger{T}"/>
@@ -25,15 +23,11 @@ public class SubscriptionHandler : ISubscriptionHandler
 
     public SubscriptionHandler(ISubscriptionService service,
         ICurrentUserService currentUserService,
-        IComplimentService complimentService,
-        IPushNotificationService pushNotificationService,
         IMapper mapper,
         ILogger<SubscriptionHandler> logger)
     {
         _service = service;
         _currentUserService = currentUserService;
-        _complimentService = complimentService;
-        _pushNotificationService = pushNotificationService;
         _mapper = mapper;
         _logger = logger;
     }
@@ -81,8 +75,7 @@ public class SubscriptionHandler : ISubscriptionHandler
 
     public async Task<string> CreateSubscriptionCode(CancellationToken token)
     {
-        var currentUserId = _currentUserService.CurrentUser?.Id ??
-                            throw new CommonErrorException("Пользователь запрашиваюший создание ссылки не найден");
+        var currentUserId = _currentUserService.GetCurrentUserId();
 
         return await _service.CreateSubscriptionCode(currentUserId, token);
     }
@@ -91,14 +84,5 @@ public class SubscriptionHandler : ISubscriptionHandler
     {
         var sub = await _service.GetAllSubscriptionForUser(token);
         return _mapper.Map<List<SubscriptionDto>>(sub);
-    }
-
-    public async Task SendComplimentToUser(Guid subscriptionId, Guid complimentId, CancellationToken token)
-    {
-        var compliment = await _complimentService.GetComplimentById(complimentId, token);
-        var subscription = await _service.GetSubscriptionById(subscriptionId, token);
-
-        await _pushNotificationService.SendComplimentNotification(subscription, compliment, token);
-        await _complimentService.SetComplimentAsPushed(complimentId, token);
     }
 }

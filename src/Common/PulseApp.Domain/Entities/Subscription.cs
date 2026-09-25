@@ -3,12 +3,17 @@ namespace PulseApp.Domain.Entities;
 /// <summary>
 /// Сущность подписки на push-уведомления
 /// </summary>
-public class SubscriptionPush
+public class Subscription
 {
     /// <summary>
     /// Идентификатор
     /// </summary>
     public Guid Id { get; set; }
+
+    /// <summary>
+    /// Имя пользователя
+    /// </summary>
+    public string Name { get; set; } = null!;
 
     /// <summary>
     /// Endpoint для отправки push-уведомлений (уникальный)

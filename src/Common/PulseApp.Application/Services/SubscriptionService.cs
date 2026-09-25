@@ -27,7 +27,7 @@ public class SubscriptionService : ISubscriptionService
     /// <inheritdoc/>
     public async Task<Guid> CreateOrUpdateSubscription(string endpoint, string p256dh, string auth, string? userAgent, string inviteCode, CancellationToken token)
     {
-        var existing = _context.Set<SubscriptionPush>().FirstOrDefault(x => x.Endpoint == endpoint);
+        var existing = _context.Set<Subscription>().FirstOrDefault(x => x.Endpoint == endpoint);
 
         if (existing is not null)
         {
@@ -47,7 +47,7 @@ public class SubscriptionService : ISubscriptionService
         }
 
         // Создаем новую подписку
-        var subscription = new SubscriptionPush
+        var subscription = new Subscription
         {
             Id = Guid.NewGuid(),
             Endpoint = endpoint,
@@ -59,7 +59,7 @@ public class SubscriptionService : ISubscriptionService
             UserOwnerId = codeUser.CreatedCodeUserId
         };
 
-        _context.Set<SubscriptionPush>().Add(subscription);
+        _context.Set<Subscription>().Add(subscription);
         codeUser.IsUsed = true;
         await _context.SaveChangesAsync(token);
 
@@ -67,18 +67,9 @@ public class SubscriptionService : ISubscriptionService
     }
 
     /// <inheritdoc/>
-    public async Task<List<SubscriptionPush>> GetActiveSubscriptions(CancellationToken token)
-    {
-        return await _context.Set<SubscriptionPush>()
-            .Where(x => x.IsActive)
-            .AsNoTracking()
-            .ToListAsync(token);
-    }
-
-    /// <inheritdoc/>
     public async Task DeactivateSubscription(Guid id, CancellationToken token)
     {
-        await _context.Set<SubscriptionPush>()
+        await _context.Set<Subscription>()
             .Where(x => x.Id == id)
             .ExecuteUpdateAsync(s => s.SetProperty(x => x.IsActive, false), token);
     }
@@ -86,7 +77,7 @@ public class SubscriptionService : ISubscriptionService
     /// <inheritdoc/>
     public async Task<bool> DeactivateSubscriptionByEndpoint(string endpoint, CancellationToken token)
     {
-        var subscription = await _context.Set<SubscriptionPush>()
+        var subscription = await _context.Set<Subscription>()
             .FirstOrDefaultAsync(x => x.Endpoint == endpoint, token);
 
         if (subscription is null)
@@ -100,39 +91,22 @@ public class SubscriptionService : ISubscriptionService
         return true;
     }
 
-    public async Task<string> CreateSubscriptionCode(Guid createUserId, CancellationToken token)
-    {
-        var codeObj = new SubscriptionCode()
-        {
-            Id = Guid.NewGuid(),
-            Code = Guid.NewGuid().ToString(),
-            CreatedAt = DateTimeOffset.UtcNow,
-            ExpireAt = DateTimeOffset.UtcNow.AddHours(24),
-            IsUsed = false,
-            CreatedCodeUserId = createUserId,
-        };
-        await _context.AddAsync(codeObj, token);
-        await _context.SaveChangesAsync(token);
-
-        return codeObj.Code;
-    }
-
-    public async Task<List<SubscriptionPush>> GetAllSubscriptionForUser(CancellationToken token)
+    public async Task<List<Subscription>> GetAllSubscriptionForUser(CancellationToken token)
     {
         var currentUserId = _currentUserService.GetCurrentUserId();
 
-        var subscriptions = await _context.Set<SubscriptionPush>()
+        var subscriptions = await _context.Set<Subscription>()
             .Where(x => x.UserOwnerId == currentUserId)
             .ToListAsync(token);
 
         return subscriptions;
     }
 
-    public async Task<SubscriptionPush> GetSubscriptionById(Guid subscriptionId, CancellationToken token)
+    public async Task<Subscription> GetSubscriptionById(Guid subscriptionId, CancellationToken token)
     {
         var currentUserId = _currentUserService.GetCurrentUserId();
 
-        var subscription = await _context.Set<SubscriptionPush>()
+        var subscription = await _context.Set<Subscription>()
             .Where(x => x.Id == subscriptionId && x.UserOwnerId == currentUserId && x.IsActive)
             .FirstOrDefaultAsync(token);
 
@@ -142,6 +116,6 @@ public class SubscriptionService : ISubscriptionService
     private async Task<SubscriptionCode> GetCode(string code, CancellationToken token)
     {
         return await _context.Set<SubscriptionCode>()
-            .FirstOrDefaultAsync(x => x.Code == code, token) ?? throw new CommonErrorException($"Код {code} не ю");
+            .FirstOrDefaultAsync(x => x.Code == code, token) ?? throw new CommonErrorException($"Код \"{code}\" не был найден");
     }
 }

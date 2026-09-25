@@ -13,11 +13,6 @@ public interface ISubscriptionService
     Task<Guid> CreateOrUpdateSubscription(string endpoint, string p256dh, string auth, string? userAgent, string inviteCode, CancellationToken token);
 
     /// <summary>
-    /// Получить все активные подписки
-    /// </summary>
-    Task<List<SubscriptionPush>> GetActiveSubscriptions(CancellationToken token);
-
-    /// <summary>
     /// Деактивировать подписку
     /// </summary>
     Task DeactivateSubscription(Guid id, CancellationToken token);
@@ -28,19 +23,11 @@ public interface ISubscriptionService
     Task<bool> DeactivateSubscriptionByEndpoint(string endpoint, CancellationToken token);
 
     /// <summary>
-    /// Создать код для подписки
-    /// </summary>
-    /// <param name="createUserId">Пользоатель который создаёт код</param>
-    /// <param name="token">Токен отмены запроса</param>
-    /// <returns>Код</returns>
-    Task<string> CreateSubscriptionCode(Guid createUserId, CancellationToken token);
-
-    /// <summary>
     /// Получить список всех подписок пользователя
     /// </summary>
     /// <param name="token">Токен отмены запросы</param>
     /// <returns>Коллекция подписок</returns>
-    Task<List<SubscriptionPush>> GetAllSubscriptionForUser(CancellationToken token);
+    Task<List<Subscription>> GetAllSubscriptionForUser(CancellationToken token);
 
     /// <summary>
     /// Получить подписку по идентификатору
@@ -48,5 +35,5 @@ public interface ISubscriptionService
     /// <param name="subscriptionId"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    Task<SubscriptionPush> GetSubscriptionById(Guid subscriptionId, CancellationToken token);
+    Task<Subscription> GetSubscriptionById(Guid subscriptionId, CancellationToken token);
 }

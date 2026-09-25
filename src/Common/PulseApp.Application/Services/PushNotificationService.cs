@@ -31,7 +31,7 @@ public class PushNotificationService : IPushNotificationService
         _logger = logger;
     }
 
-    public async Task SendComplimentNotification(SubscriptionPush subscription, Compliment compliment, CancellationToken token)
+    public async Task SendComplimentNotification(Subscription subscription, Compliment compliment, CancellationToken token)
     {
         using var webPushClient = new WebPushClient();
 
@@ -45,7 +45,7 @@ public class PushNotificationService : IPushNotificationService
     }
 
 
-    private async Task SendNotificationToSubscriber(SubscriptionPush subscription, WebPushClient webPushClient, PushNotificationPayload payload, CancellationToken token)
+    private async Task SendNotificationToSubscriber(Subscription subscription, WebPushClient webPushClient, PushNotificationPayload payload, CancellationToken token)
     {
         try
         {

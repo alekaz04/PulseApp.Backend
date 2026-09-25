@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PulseApp.Application.AutoMapper;
+using PulseApp.Application.Controllers;
 using PulseApp.Application.Handlers;
 using PulseApp.Application.Interfaces;
+using PulseApp.Application.Interfaces.Services;
 using PulseApp.Application.Jobs;
 using PulseApp.Application.Services;
 using PulseApp.Extensions.DependencyInjection;
@@ -25,6 +27,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IComplimentService, ComplimentService>();
 
         services.AddScoped<IPushComplimentService, PushComplimentService>();
+        services.AddScoped<ISubscriptionCodeService, SubscriptionCodeService>();
+        services.AddScoped<ISubscriptionCodeHandler, SubscriptionCodeHandler>();
 
         services.AddScoped<ISubscriptionHandler, SubscriptionHandler>();
         services.AddScoped<IComplimentHandler, ComplimentHandler>();

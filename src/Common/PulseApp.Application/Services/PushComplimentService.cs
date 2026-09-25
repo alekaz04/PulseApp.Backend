@@ -20,7 +20,7 @@ public class PushComplimentService(
             .FirstOrDefaultAsync(x => x.Id == complimentId && !x.IsDeleted && x.CreatedByUserId == currentUserId, token)
                          ?? throw new CommonErrorException($"Комплимент с идентификатором {complimentId} не найден");
 
-        var subscription = await context.Set<SubscriptionPush>()
+        var subscription = await context.Set<Subscription>()
                                .FirstOrDefaultAsync(
                                    x => x.Id == subscriptionId && x.IsActive && x.UserOwnerId == currentUserId, token)
                            ?? throw new CommonErrorException(

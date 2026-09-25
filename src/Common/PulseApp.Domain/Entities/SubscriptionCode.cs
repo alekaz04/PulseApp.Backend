@@ -19,6 +19,11 @@ public class SubscriptionCode
     public string Code { get; set; } = null!;
 
     /// <summary>
+    /// Имя пользователя который будет получать уведомления
+    /// </summary>
+    public string Name { get; set; } = null!;
+
+    /// <summary>
     /// Дата и время создания кода
     /// </summary>
     public DateTimeOffset CreatedAt { get; set; }

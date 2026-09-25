@@ -73,12 +73,7 @@ public class SubscriptionHandler : ISubscriptionHandler
         return new UnsubscribeResponse(true, "Successfully unsubscribed");
     }
 
-    public async Task<string> CreateSubscriptionCode(CancellationToken token)
-    {
-        var currentUserId = _currentUserService.GetCurrentUserId();
 
-        return await _service.CreateSubscriptionCode(currentUserId, token);
-    }
 
     public async Task<List<SubscriptionDto>> GetAllSubscriptionForUser(CancellationToken token)
     {

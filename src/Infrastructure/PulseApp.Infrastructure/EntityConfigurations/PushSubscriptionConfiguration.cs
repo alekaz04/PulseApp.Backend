@@ -7,9 +7,9 @@ namespace PulseApp.Infrastructure.EntityConfigurations;
 /// <summary>
 /// Конфигурация сущности PushSubscription для EF Core
 /// </summary>
-public class PushSubscriptionConfiguration : IEntityTypeConfiguration<SubscriptionPush>
+public class PushSubscriptionConfiguration : IEntityTypeConfiguration<Subscription>
 {
-    public void Configure(EntityTypeBuilder<SubscriptionPush> builder)
+    public void Configure(EntityTypeBuilder<Subscription> builder)
     {
         builder.HasKey(x => x.Id);
 

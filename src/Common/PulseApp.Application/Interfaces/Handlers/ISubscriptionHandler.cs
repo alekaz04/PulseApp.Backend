@@ -22,13 +22,6 @@ public interface ISubscriptionHandler
     public Task<UnsubscribeResponse> Unsubscribe(string endpoint, CancellationToken token);
 
     /// <summary>
-    /// Создать код для подписки
-    /// </summary>
-    /// <param name="token">Токен отмены запросы</param>
-    /// <returns>Код</returns>
-    Task<string> CreateSubscriptionCode(CancellationToken token);
-
-    /// <summary>
     /// Получить всех подписчиков текущего пользователя
     /// </summary>
     /// <param name="token">Токен отмены запроса</param>

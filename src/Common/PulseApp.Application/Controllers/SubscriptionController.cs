@@ -16,12 +16,6 @@ public class SubscriptionController : ControllerBase
         _handler = handler;
     }
 
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateSubscriptionCode(CancellationToken token)
-    {
-        string code = await _handler.CreateSubscriptionCode(token);
-        return Ok(code);
-    }
 
     /// <summary>
     /// Получить всех подписчиков пользователя
@@ -33,4 +27,9 @@ public class SubscriptionController : ControllerBase
         var result = await _handler.GetAllSubscriptionForUser(token);
         return Ok(result);
     }
+}
+
+public class CreateSubscriptionCodeDto
+{
+    public string Name { get; set; }
 }

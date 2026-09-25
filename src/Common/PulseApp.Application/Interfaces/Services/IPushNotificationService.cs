@@ -13,5 +13,5 @@ public interface IPushNotificationService
     /// <param name="subscription">Подписчик</param>
     /// <param name="compliment">Комплимент</param>
     /// <param name="token">Токен отмены запроса</param>
-    Task SendComplimentNotification(SubscriptionPush subscription, Compliment compliment, CancellationToken token);
+    Task SendComplimentNotification(Subscription subscription, Compliment compliment, CancellationToken token);
 }

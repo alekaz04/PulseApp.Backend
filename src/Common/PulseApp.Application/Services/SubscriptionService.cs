@@ -25,8 +25,15 @@ public class SubscriptionService : ISubscriptionService
     }
 
     /// <inheritdoc/>
-    public async Task<Guid> CreateOrUpdateSubscription(string endpoint, string p256dh, string auth, string? userAgent, string inviteCode ,CancellationToken token)
+    public async Task<Guid> CreateOrUpdateSubscription(string endpoint, string p256dh, string auth, string? userAgent, string inviteCode, CancellationToken token)
     {
+        var existing = _context.Set<SubscriptionPush>().FirstOrDefault(x => x.Endpoint == endpoint);
+
+        if (existing is not null)
+        {
+            throw new CommonErrorException("Endpoint already exists");
+        }
+
         var codeUser = await GetCode(inviteCode, token);
 
         if (codeUser.IsUsed)
@@ -108,6 +115,27 @@ public class SubscriptionService : ISubscriptionService
         await _context.SaveChangesAsync(token);
 
         return codeObj.Code;
+    }
+
+    public async Task<List<SubscriptionPush>> GetAllSubscriptionForUser(CancellationToken token)
+    {
+        var currentUserId = _currentUserService.CurrentUser?.Id ?? throw new CommonErrorException("User not logged in");
+
+        var subscriptions = await _context.Set<SubscriptionPush>()
+            .Where(x => x.UserOwnerId == currentUserId)
+            .ToListAsync(token);
+
+        return subscriptions;
+    }
+
+    public async Task<SubscriptionPush> GetSubscriptionById(Guid subscriptionId, CancellationToken token)
+    {
+        var currentUserId = _currentUserService.CurrentUser?.Id ?? throw new CommonErrorException("User not logged in");
+        var subscription = await _context.Set<SubscriptionPush>()
+            .Where(x => x.Id == subscriptionId && x.UserOwnerId == currentUserId && x.IsActive)
+            .FirstOrDefaultAsync(token);
+
+        return subscription ?? throw new CommonErrorException("Subscription not found or it is not active");
     }
 
     public async Task<SubscriptionCode> GetCode(string code, CancellationToken token)

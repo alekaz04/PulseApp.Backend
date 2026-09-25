@@ -22,5 +22,7 @@ public class PulseAppProfile : Profile
 
         CreateMap<ComplimentUpdateDto, Compliment>()
             .ForMember(x => x.UpdatedAt, e => e.MapFrom(x => DateTimeOffset.UtcNow));
+
+        CreateMap<SubscriptionPush, SubscriptionDto>();
     }
 }

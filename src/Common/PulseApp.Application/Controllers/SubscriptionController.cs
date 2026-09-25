@@ -25,4 +25,26 @@ public class SubscriptionController : ControllerBase
         string code = await _handler.CreateSubscriptionCode(token);
         return Ok(code);
     }
+
+    /// <summary>
+    /// Получить всех подписчиков пользователя
+    /// </summary>
+    /// <param name="token">Токен отмены запроса</param>
+    [HttpGet]
+    public async Task<IActionResult> GetAllSubscribers(CancellationToken token)
+    {
+        var result = await _handler.GetAllSubscriptionForUser(token);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Отправить комплимент пользователю
+    /// </summary>
+    [HttpPost("push/to/{subscriptionId:guid}")]
+    public async Task<ActionResult> SendComplimentToUser([FromRoute] Guid subscriptionId, [FromQuery] Guid complimentId, CancellationToken token)
+    {
+        await _handler.SendComplimentToUser(subscriptionId, complimentId, token);
+
+        return Ok();
+    }
 }

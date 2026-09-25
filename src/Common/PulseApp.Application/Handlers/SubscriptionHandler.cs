@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using PulseApp.Application.DTOs;
 using PulseApp.Application.Interfaces;
 using PulseApp.Authentication.Abstraction;
@@ -15,14 +16,25 @@ public class SubscriptionHandler : ISubscriptionHandler
     private readonly ISubscriptionService _service;
 
     private readonly ICurrentUserService _currentUserService;
+    private readonly IComplimentService _complimentService;
+    private readonly IPushNotificationService _pushNotificationService;
+    private readonly IMapper _mapper;
 
     /// <inheritdoc cref="ILogger{T}"/>
     private readonly ILogger<SubscriptionHandler> _logger;
 
-    public SubscriptionHandler(ISubscriptionService service,ICurrentUserService currentUserService ,ILogger<SubscriptionHandler> logger)
+    public SubscriptionHandler(ISubscriptionService service,
+        ICurrentUserService currentUserService,
+        IComplimentService complimentService,
+        IPushNotificationService pushNotificationService,
+        IMapper mapper,
+        ILogger<SubscriptionHandler> logger)
     {
         _service = service;
         _currentUserService = currentUserService;
+        _complimentService = complimentService;
+        _pushNotificationService = pushNotificationService;
+        _mapper = mapper;
         _logger = logger;
     }
 
@@ -73,5 +85,20 @@ public class SubscriptionHandler : ISubscriptionHandler
                             throw new CommonErrorException("Пользователь запрашиваюший создание ссылки не найден");
 
         return await _service.CreateSubscriptionCode(currentUserId, token);
+    }
+
+    public async Task<List<SubscriptionDto>> GetAllSubscriptionForUser(CancellationToken token)
+    {
+        var sub = await _service.GetAllSubscriptionForUser(token);
+        return _mapper.Map<List<SubscriptionDto>>(sub);
+    }
+
+    public async Task SendComplimentToUser(Guid subscriptionId, Guid complimentId, CancellationToken token)
+    {
+        var compliment = await _complimentService.GetComplimentById(complimentId, token);
+        var subscription = await _service.GetSubscriptionById(subscriptionId, token);
+
+        await _pushNotificationService.SendComplimentNotification(subscription, compliment, token);
+        await _complimentService.SetComplimentAsPushed(complimentId, token);
     }
 }

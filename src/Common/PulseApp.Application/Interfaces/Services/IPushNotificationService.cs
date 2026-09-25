@@ -24,4 +24,12 @@ public interface IPushNotificationService
     /// Отправить push-уведомление подписчикам
     /// </summary>
     Task SendNotificationToSubscribers(List<SubscriptionPush> subscriptions, PushNotificationPayload payload, CancellationToken token);
+
+    /// <summary>
+    /// Отправить комплимент пользователю подписчику
+    /// </summary>
+    /// <param name="subscription">Подписчик</param>
+    /// <param name="compliment">Комплимент</param>
+    /// <param name="token">Токен отмены запроса</param>
+    Task SendComplimentNotification(SubscriptionPush subscription, Compliment compliment, CancellationToken token);
 }

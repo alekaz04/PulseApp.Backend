@@ -31,6 +31,20 @@ public class PushNotificationService : IPushNotificationService
         _logger = logger;
     }
 
+    public async Task SendComplimentNotification(SubscriptionPush subscription, Compliment compliment, CancellationToken token)
+    {
+        using var webPushClient = new WebPushClient();
+
+        var payload = new PushNotificationPayload(
+            Title: compliment.Title,
+            Body: compliment.Text,
+            Icon: "/favicon/web-app-manifest-192x192.png",
+            Badge: "/favicon/favicon-96x96.png"
+        );
+        await SendNotificationToSubscriber(subscription, webPushClient, payload, token);
+    }
+
+
     /// <inheritdoc/>
     public async Task SendNotificationToSubscriber(SubscriptionPush subscription, WebPushClient webPushClient, PushNotificationPayload payload, CancellationToken token)
     {

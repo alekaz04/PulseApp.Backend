@@ -50,6 +50,7 @@ public class SubscriptionService : ISubscriptionService
         var subscription = new Subscription
         {
             Id = Guid.NewGuid(),
+            Name = codeUser.Name,
             Endpoint = endpoint,
             P256dh = p256dh,
             Auth = auth,
